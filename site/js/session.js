@@ -1,10 +1,11 @@
 // État du prototype en sessionStorage : fermer l'onglet remet tout à zéro
 // pour le testeur suivant (CLAUDE.md). Aucune donnée n'est envoyée.
 //
-// Panier : [{ slug, taille, quantite }]
-// Une ligne par couple pièce + taille.
+// Panier : [{ slug, taille, quantite }] — une ligne par couple pièce + taille.
+// Profil de taille : { type: 'Veste ou manteau', mesures: { poitrine: 56, … } }
 
 const CLE_PANIER = 'name-panier';
+const CLE_PROFIL = 'name-profil-taille';
 
 function lire(cle, valeurParDefaut) {
   try {
@@ -15,14 +16,16 @@ function lire(cle, valeurParDefaut) {
   }
 }
 
-function ecrire(cle, valeur) {
+function ecrire(cle, valeur, evenement) {
   try {
     sessionStorage.setItem(cle, JSON.stringify(valeur));
   } catch {
     // Navigation privée stricte : le prototype continue, sans mémoire.
   }
-  document.dispatchEvent(new CustomEvent('panier:change'));
+  if (evenement) document.dispatchEvent(new CustomEvent(evenement));
 }
+
+const ecrirePanier = (panier) => ecrire(CLE_PANIER, panier, 'panier:change');
 
 export function lirePanier() {
   return lire(CLE_PANIER, []);
@@ -38,16 +41,24 @@ export function ajouterAuPanier({ slug, taille, quantite = 1 }) {
   const ligne = panier.find((l) => l.slug === slug && l.taille === taille);
   if (ligne) ligne.quantite += quantite;
   else panier.push({ slug, taille, quantite });
-  ecrire(CLE_PANIER, panier);
+  ecrirePanier(panier);
 }
 
 export function changerQuantite(slug, taille, quantite) {
-  const panier = lirePanier().map((l) => (l.slug === slug && l.taille === taille ? { ...l, quantite } : l));
-  ecrire(CLE_PANIER, panier);
+  ecrirePanier(lirePanier().map((l) => (l.slug === slug && l.taille === taille ? { ...l, quantite } : l)));
 }
 
 export function retirerDuPanier(slug, taille) {
-  ecrire(CLE_PANIER, lirePanier().filter((l) => !(l.slug === slug && l.taille === taille)));
+  ecrirePanier(lirePanier().filter((l) => !(l.slug === slug && l.taille === taille)));
+}
+
+// Profil de taille (guide « Ma référence ») — effacé à la fermeture de l'onglet
+export function lireProfil() {
+  return lire(CLE_PROFIL, null);
+}
+
+export function ecrireProfil(profil) {
+  ecrire(CLE_PROFIL, profil, 'profil:change');
 }
 
 // Petit drapeau de session (ex. bandeau d'arrivée vu une fois par visite)

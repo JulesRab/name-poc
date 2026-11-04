@@ -110,6 +110,27 @@ CSS : `site/css/styles.css` (jetons dans `site/css/tokens.css`). Icônes : SVG F
 | Carte produit du Bombers | Bloc gris | Packshots face / dos exportés | Décision : photos Figma dès qu'elles existent |
 | Mosaïque mobile | Pas de maquette | Grille 2 colonnes, points listés sous la mosaïque | Lisibilité au toucher |
 
+## Flow 3 — guide des tailles « Ma référence » (prompt 04)
+
+| Composant Figma | Nœud | Code | États couverts |
+| --- | --- | --- | --- |
+| Guide des tailles — Ma référence | 113:528 (écran 04.5) | `js/guide-tailles.js` → `form.guide__saisie` | Saisie (exemple du catalogue en placeholder), erreurs par champ (vide, non numérique, hors 20–150 cm), virgule acceptée, clavier décimal |
+| Guide des tailles — Comparaison | 113:639 (écran 04.7) | `[data-comparaison]` : `.guide__resultat`, `.guide__comparer`, `.guide__comparaison-visuelle` (SVG à l'échelle), `.guide__tableau--ecarts` | Taille recommandée, « Comparer en » (voisines), alerte hors gamme (XL / XS), Choisir la taille, Modifier ma référence |
+| Infos produit — Taille recommandée | 87:387 (écran 04.6) | `.infos__recommandation` (dans `js/produit.js`) | Phrase de l'écart principal + « Voir la comparaison » ; taille choisie à la main prioritaire |
+| Volet fabrication | 89:506 (écran 04.8) | `js/fabrication.js` → `dialog#volet-fabrication` ; `gabaritEtapes()` partagé avec l'onglet de la fiche | Ouvert depuis « Voir les étapes de fabrication » (bloc Tissu du moment) |
+| — | — | `js/taille.js` (logique pure) + `tests/taille.test.js` | Recommandation, écarts, formulation, voisines, hors gamme, lecture des saisies |
+
+### Écarts du flow 3
+
+| Élément | Figma | Code | Raison |
+| --- | --- | --- | --- |
+| Case « Mémoriser ma référence sur cet appareil » | Présente, décochée | Retirée | Décision du 04/11 : référence gardée en `sessionStorage` automatiquement, la mention « Vos mesures restent sur cet appareil » suffit |
+| Sous-titre de la comparaison | « …votre veste en laine de référence » | « …votre vêtement de référence » | Prompt 04 : la matière n'est pas demandée |
+| Libellé de la taille | « Taille : M — recommandée pour vous » | « Taille : M » | Prompt 04 |
+| Guide en mobile | Volet qui monte du bas | Plein écran | Prompt 04 |
+| Bouton « Choisir la taille » | M | Suit la taille comparée (S, M ou L) | Choisir directement la taille regardée |
+| Légende du schéma | Caractères ━ ┅ | Traits en CSS (plein / pointillé) | Rendu identique quelle que soit la police |
+
 ## À construire avec leur flow
 
-Récapitulatif, Infos look, En-tête commande, Fiche pièce, Guide des tailles (Ma référence, Comparaison), Volet fabrication, Toast, Étape de suivi, Frise de fabrication, Détail d'étape, Slider et carrousel Le Conseiller.
+Récapitulatif, Infos look, En-tête commande, Fiche pièce, Toast, Étape de suivi, Frise de fabrication, Détail d'étape, Slider et carrousel Le Conseiller.

@@ -198,7 +198,15 @@
   --hauteur-ligne-panier: 120px;
   --hauteur-schema: 180px;                                  /* Guide : schéma de mesure */
   --icone-points: 6px;                                      /* Points du carrousel */
-  --hauteur-volet-bas: 90svh;                               /* [POC] Guide en mobile (monte du bas) */
+  --hauteur-volet-bas: 90svh;                               /* [POC] Volet qui monte du bas (non utilisé : guide plein écran en mobile, prompt 04) */
+
+  /* Flow 3 — guide « Ma référence » (relevés sur 113:528, 113:639) */
+  --hauteur-schema-saisie: 140px;                           /* Schéma « où mesurer » */
+  --hauteur-comparaison: 180px;                             /* Silhouettes superposées */
+  --trait-schema-piece: 2px;                                /* Silhouette de la pièce */
+  --trait-schema-reference: 1.5px;                          /* Silhouette de la référence (pointillés) */
+  --pointilles-schema: 4 3;                                 /* Motif des pointillés (SVG) */
+  --legende-trait: 16px;                                    /* Échantillon de trait dans la légende */
 
   /* Superposition */
   --plan-entete: 10;

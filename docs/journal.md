@@ -147,3 +147,50 @@ Une entrée par itération : date, prompt, résultat, corrections.
 - Contenus éditoriaux dans `js/contenus-produit.js` : à migrer dans `data/catalogue.json` si l'équipe le valide.
 - Styleguide : composants du flow 1 à y ajouter.
 - Prochaine étape : prompt 04, flow 3 (guide « Ma référence », recommandation, comparaison, volet fabrication) — fichier de prompt vide.
+
+## 04/11/2026 — Prompt 04 : flow 3 (guide des tailles « Ma référence »)
+
+**Demande** : saisie de la référence (04.5), recommandation et comparaison (04.7), état Taille recommandée sur la fiche (04.6), logique isolée et testée. Volet fabrication (04.8) ajouté à la demande.
+
+**Décisions validées avant de coder**
+- Case « Mémoriser ma référence » retirée (référence en `sessionStorage`, effacée à la fermeture de l'onglet).
+- Phrase de la fiche : « 4 cm plus ample à la poitrine », « 2 cm plus étroit aux épaules », « 2 cm plus court », « 1 cm plus long aux manches », suivie de « que votre référence ». Égalité d'écarts : le premier dans l'ordre du catalogue (poitrine, longueur, épaules, manche).
+- Volet fabrication construit dans cette itération.
+
+**Fait**
+- Nœuds lus : 113:528, 113:639, 89:506 (87:387 et 83:209 déjà lus au prompt 03).
+- `site/js/taille.js` (logique pure, sans DOM) et `tests/taille.test.js` (`node tests/taille.test.js`, aucune dépendance).
+- `js/guide-tailles.js` : vues Ma référence et Comparaison, schéma SVG à l'échelle (largeur = poitrine, hauteur = longueur), plein écran en mobile.
+- `js/fabrication.js` : volet 04.8 et gabarit des étapes partagé avec l'onglet de la fiche.
+- `js/session.js` : profil de taille ; événements panier et profil séparés. `js/produit.js` : état 04.6, recommandation directe si un profil compatible existe.
+
+**Tests (Node)** : 12 / 12. Les 6 cas du prompt : (56, 70, 48, 62) → M « 4 cm plus ample à la poitrine » · (55, 67, 48, 62) → S (égalité S / M) · (59, 67, 47, 62) → M · (64, 69, 51, 63) → L · (70, 76, 56, 66) → XL + « plus ample que notre XL » · (50, 60, 40, 58) → XS + « plus ajustée ». Contrôle CLAUDE.md : la référence d'exemple du catalogue donne M.
+
+**Vérifications navigateur (Playwright, 393 et 1440 px)**
+| Action | Résultat |
+| --- | --- |
+| « Voir ma taille » champs vides | Erreur sous chaque champ, focus sur Poitrine |
+| « 56,5 » | Accepté |
+| 300 | « Vérifiez cette mesure : elle se prend à plat, en centimètres. », focus dessus |
+| Comparer en L après M | Schéma (63 × 70) et tableau mis à jour, bouton « Choisir la taille L » |
+| « Choisir la taille M » | Volet fermé, « Taille : M », phrase de recommandation, « Ajouter au panier — 700 € » |
+| Recharger la page | Recommandation et M conservés |
+| Nouvel onglet | Plus de profil ni de panier |
+| Fiche Pull (sans guide) avec profil | Rien ne change ; Ma référence en [À définir] |
+| « Voir les étapes de fabrication » | Volet 04.8, 6 étapes, délai du catalogue |
+
+**Recette — Mission 1 (desktop et mobile)**
+- [x] Depuis l'accueil, fiche du Bombers en 1 action.
+- [x] La fiche affiche nom, prix, tissu du moment, tailles XS à XL, délai, livraison et retours.
+- [x] Clic sur le bouton sans taille : erreur 04.3, sans blocage (bouton libellé « Choisir ma taille » dans la maquette).
+- [x] Le guide s'ouvre en volet, avec « Tableau des mesures » et « Ma référence ».
+- [x] Le tableau reprend les valeurs du catalogue.
+- [x] Référence 56 / 70 / 48 / 62 : M recommandé, écarts affichés.
+- [x] « Choisir la taille M » sélectionne M sur la fiche et ferme le volet.
+- [x] L'ajout ouvre le panneau panier, compteur de l'en-tête à 1.
+- Accessibilité : zones tactiles ≥ 44 px (guide saisie et comparaison), libellés visibles, erreurs avec icône et texte, focus géré à chaque changement de vue, console propre.
+
+**Reste à faire / à valider**
+- Le protocole de test doit être réécrit sur le Bombers (cartes de mesures) — hors code.
+- Styleguide : composants des flows 1 et 3 à y ajouter.
+- Prochaine étape : prompt 05, flow 2 (panier, commande, confirmation).

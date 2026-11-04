@@ -3,10 +3,12 @@
 
 import { chargerCatalogue, produitsSignature, prix } from './catalogue.js';
 import { carteProduit, initialiserCartes } from './carte-produit.js';
-import { contenu, ETAPES_FABRICATION } from './contenus-produit.js';
+import { contenu } from './contenus-produit.js';
+import { gabaritEtapes, ouvrirFabrication } from './fabrication.js';
+import { phraseRecommandation } from './taille.js';
 import { initialiserOnglets } from './onglets.js';
 import { initialiserEtrePrevenu } from './etre-prevenu.js';
-import { preparerGuide, ouvrirGuide } from './guide-tailles.js';
+import { preparerGuide, ouvrirGuide, recommandationPour } from './guide-tailles.js';
 import { ouvrirPanneauPanier } from './panier.js';
 import { ajouterAuPanier, drapeau } from './session.js';
 import { lien, lienProduit, INDISPONIBLE } from './liens.js';
@@ -142,7 +144,7 @@ function infosProduit() {
           <legend class="infos__legende">Taille<span data-taille-choisie></span></legend>
           <div class="infos__libelle-taille">
             <div class="infos__liens-taille">
-              <button class="lien" type="button" data-ouvrir-guide="reference" aria-haspopup="dialog">Trouver ma taille</button>
+              <button class="lien" type="button" data-ouvrir-guide="reference" aria-haspopup="dialog" data-trouver-taille>Trouver ma taille</button>
               <button class="lien" type="button" data-ouvrir-guide="tableau" aria-haspopup="dialog">Guide des tailles</button>
             </div>
           </div>
@@ -153,6 +155,9 @@ function infosProduit() {
             <span class="icone icone--alerte" aria-hidden="true"></span>Choisissez votre taille pour continuer.
           </p>
           <p class="infos__conseil" id="taille-conseil">Coupe unisexe. Entre deux tailles : prenez la plus petite pour un tombé ajusté.</p>
+          <p class="infos__recommandation" data-recommandation hidden>
+            <span data-phrase-recommandation></span> · <button class="lien" type="button" data-ouvrir-guide="comparaison" aria-haspopup="dialog">Voir la comparaison</button>
+          </p>
         </fieldset>
         <div class="infos__achat">
           <p data-delai></p>
@@ -217,18 +222,7 @@ function panneaux() {
       <p>Réf. : ${echapper(infos.reference)}</p>
     </div>` : `<p>${AD('Détails, composition et entretien')}</p>`;
 
-  const livraison = `
-    <div class="carte-blanche etapes-fabrication">
-      <h3 class="titre-s">De la commande à chez vous</h3>
-      <ol class="etapes-fabrication__liste">
-        ${ETAPES_FABRICATION.map((e, i) => `
-          <li class="etapes-fabrication__etape">
-            <span class="etapes-fabrication__numero" aria-hidden="true">${i + 1}</span>
-            <div><p class="etapes-fabrication__titre">${e.titre}</p><p class="texte-m">${e.texte}</p></div>
-          </li>`).join('')}
-      </ol>
-      <p class="etapes-fabrication__statut"><span class="icone icone--courriel" aria-hidden="true"></span>Chaque étape vous est envoyée par e-mail, avec des photos de l’atelier.</p>
-    </div>`;
+  const livraison = `<div class="carte-blanche etapes-fabrication">${gabaritEtapes()}</div>`;
 
   return [
     ['vision', 'Vision produit', vision],
@@ -308,7 +302,7 @@ initialiserCartes();
 initialiserEtrePrevenu(main);
 const { initialiserDelais } = await import('./delai.js');
 initialiserDelais(main);
-if (!aVenir) await preparerGuide(produit);
+if (!aVenir) await preparerGuide(produit, { onChoisir: choisirTaille });
 
 // --- Comportements ------------------------------------------------------------
 const formulaire = main.querySelector('[data-formulaire-achat]');
@@ -323,12 +317,49 @@ function afficherErreurTaille(oui) {
   erreur.hidden = !oui;
 }
 
-formulaire?.addEventListener('change', (e) => {
-  if (e.target.name !== 'taille') return;
-  tailleChoisie.textContent = ` : ${e.target.value}`;
+function majTailleChoisie(taille) {
+  tailleChoisie.textContent = ` : ${taille}`;
   bouton.textContent = `Ajouter au panier — ${prix(produit.prix)}`;
   afficherErreurTaille(false);
+}
+
+// État « Taille recommandée » (04.6) : la recommandation reste affichée,
+// la taille choisie à la main prime toujours.
+function afficherRecommandation() {
+  const reco = recommandationPour(catalogue.guidesTailles[produit.guideTailles], catalogue.tailles);
+  const zone = main.querySelector('[data-recommandation]');
+  if (!zone) return null;
+  zone.hidden = !reco;
+  main.querySelector('#taille-conseil').hidden = Boolean(reco);
+  main.querySelector('[data-trouver-taille]').hidden = Boolean(reco);
+  if (reco) zone.querySelector('[data-phrase-recommandation]').textContent = phraseRecommandation(reco.taille, reco.ecarts);
+  return reco;
+}
+
+function selectionnerTaille(taille) {
+  const radio = formulaire.querySelector(`input[name="taille"][value="${taille}"]`);
+  if (!radio) return;
+  radio.checked = true;
+  majTailleChoisie(taille);
+}
+
+// « Choisir la taille M » dans le guide : volet fermé, fiche en état 04.6
+function choisirTaille(taille) {
+  afficherRecommandation();
+  selectionnerTaille(taille);
+  formulaire.querySelector(`input[name="taille"][value="${taille}"]`).focus();
+}
+
+formulaire?.addEventListener('change', (e) => {
+  if (e.target.name !== 'taille') return;
+  majTailleChoisie(e.target.value);
 });
+
+// Profil déjà saisi (sur cette fiche ou une autre au même type de référence)
+if (formulaire) {
+  const reco = afficherRecommandation();
+  if (reco) selectionnerTaille(reco.taille);
+}
 
 formulaire?.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -348,10 +379,11 @@ main.addEventListener('click', (e) => {
   if (guide) ouvrirGuide(guide, guide.dataset.ouvrirGuide);
 
   if (e.target.closest('[data-vers-tissu]')) {
-    // Volet fabrication (04.8) au prompt 04 : en attendant, onglet « Tissu du moment »
+    // Le bloc « Tissu du moment » ouvre ensuite le volet fabrication (04.8)
     activerPanneau('tissu');
   }
-  if (e.target.closest('[data-vers-etapes]')) activerPanneau('livraison');
+  const versEtapes = e.target.closest('[data-vers-etapes]');
+  if (versEtapes) ouvrirFabrication(versEtapes); // Volet fabrication (04.8)
 
   if (e.target.closest('[data-fermer-bandeau]')) {
     drapeau('bandeau-arrivee-vu', true);
