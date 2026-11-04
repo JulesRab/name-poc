@@ -1,6 +1,6 @@
 // Page panier (Figma 06.3) et panier vide (06.4).
 
-import { lignesDetaillees, ligneProduit } from './panier.js';
+import { lignesDetaillees, ligneProduit, avecSignature } from './panier.js';
 import { lirePanier, changerQuantite, retirerDuPanier } from './session.js';
 import { gabaritRecapitulatif, gabaritAide } from './recapitulatif.js';
 import { lien } from './liens.js';
@@ -35,7 +35,7 @@ async function rendre(focus) {
         <ul class="page-panier__lignes" role="list">${(await Promise.all(lignes.map((l) => ligneProduit(l)))).join('')}</ul>
       </div>
       <div class="page-panier__colonne">
-        ${await gabaritRecapitulatif(total)}
+        ${await gabaritRecapitulatif(total, { signature: avecSignature(lignes) })}
         <a class="bouton bouton--l bouton--pleine-largeur" href="${lien('commande', { etape: 'coordonnees' })}">Commander</a>
         <p class="recapitulatif__note">Paiement par carte, Apple Pay, Google Pay ou en 3 fois sans frais. Sans création de compte.</p>
         ${gabaritAide()}

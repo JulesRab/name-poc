@@ -56,7 +56,7 @@
       { "slug": "le-bras-droit", "rang": 2, "personnage": "Le Bras-Droit", "prix": 2300, "statut": "disponible", "pieces": [ { "nom": "Fourrure", "prix": 1260 }, { "nom": "Veston", "prix": 490 }, { "nom": "Pantalon", "prix": 550 } ] },
       { "slug": "le-conseiller", "rang": 3, "personnage": "Le Conseiller", "prix": 1750, "statut": "disponible", "pieces": [ { "nom": "Manteau", "prix": 1050 }, { "nom": "Chemise", "prix": 280 }, { "nom": "Pantalon", "prix": 420 } ] },
       { "slug": "le-baron", "rang": 4, "personnage": "Le Baron", "prix": 1700, "statut": "disponible", "pieces": [ { "nom": "Trench", "prix": 970 }, { "nom": "Pull", "prix": 400 }, { "nom": "Pantalon", "prix": 330 } ] },
-      { "slug": "l-homme-de-main", "rang": 5, "personnage": "L'Homme de Main", "prix": 1050, "statut": "disponible", "pieces": [ { "nom": "Bombers", "prix": 720 }, { "nom": "Débardeur", "prix": 30 }, { "nom": "Pantalon", "prix": 300 } ] }
+      { "slug": "l-homme-de-main", "rang": 5, "personnage": "L'Homme de Main", "prix": 1050, "statut": "vendu", "pieces": [ { "nom": "Bombers", "prix": 720 }, { "nom": "Débardeur", "prix": 30 }, { "nom": "Pantalon", "prix": 300 } ] }
     ]
   }
 }

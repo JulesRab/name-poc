@@ -5,6 +5,7 @@
 import { prix } from './catalogue.js';
 import { lienProduit, lienLook } from './liens.js';
 import { contenu } from './contenus-produit.js';
+import { citationLook, photoCarteLook } from './contenus-look.js';
 
 // Visuels à produire : blocs gris avec leur contenu attendu (composant Visuel).
 const VISUELS_PRODUIT = ['Packshot face — fond neutre', 'Packshot dos — fond neutre'];
@@ -51,18 +52,23 @@ export function carteProduit(produit, { titre = 'h3' } = {}) {
     </article>`;
 }
 
-// Carte look : personnage, prix du look complet. La citation n'existe pas
-// encore dans le catalogue : elle n'est pas affichée (pas d'invention).
-export function carteLook(look, { titre = 'h3' } = {}) {
+// Carte look (85:316) : photo en pied, personnage, citation, prix du look complet.
+// État Vendu : mention pleine, prix remplacé (05.4).
+export function carteLook(look, { titre = 'h3', citation = true } = {}) {
   const vendu = look.statut === 'vendu';
+  const photo = photoCarteLook(look);
+  const phrase = citation ? citationLook(look.slug) : null;
   return `
-    <article class="carte-look" data-carte>
+    <article class="carte-look${vendu ? ' carte-look--vendu' : ''}" data-carte>
       <div class="carte-look__media">
-        <div class="visuel carte-look__visuel" role="img" aria-label="${echapper(look.personnage)}, visuel à produire : photo look Collection, plan large, personnage en pied">Photo look Collection — plan large, personnage en pied</div>
+        ${photo
+          ? `<img class="carte-look__visuel carte-look__photo" src="${photo.src}" alt="${echapper(photo.alt)}" loading="lazy" width="933" height="1400">`
+          : `<div class="visuel carte-look__visuel" role="img" aria-label="${echapper(look.personnage)}, visuel à produire : photo look Collection, plan large, personnage en pied">Photo look Collection — plan large, personnage en pied</div>`}
         ${vendu ? '<span class="mention mention--plein carte-produit__mention">Vendu</span>' : ''}
       </div>
       <div class="carte-look__infos">
         <${titre} class="carte-look__nom"><a class="carte-produit__lien" href="${lienLook(look.slug)}">${echapper(look.personnage)}</a></${titre}>
+        ${phrase ? `<p class="carte-look__citation">« ${echapper(phrase)} »</p>` : ''}
         <p class="carte-look__prix">${vendu ? 'Look complet · vendu' : `Look complet · ${prix(look.prix)}`}</p>
       </div>
     </article>`;

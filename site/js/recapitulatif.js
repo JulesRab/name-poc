@@ -6,9 +6,12 @@ import { euros } from './paiement.js';
 import { INDISPONIBLE } from './liens.js';
 
 export const CONTACT = 'contact@name-atelier.com';
+export const DELAI_LOOK = 'Pièces uniques existantes · expédiées sous 3 jours ouvrés';
 
-export async function gabaritRecapitulatif(total) {
+// signature : le panier contient une pièce fabriquée à la commande (sinon : looks seuls)
+export async function gabaritRecapitulatif(total, { signature = true } = {}) {
   const { delai, retours } = await chargerCatalogue();
+  const mention = signature ? delai : DELAI_LOOK;
   return `
     <section class="recapitulatif" aria-labelledby="recap-titre">
       <h2 class="recapitulatif__titre" id="recap-titre">Récapitulatif</h2>
@@ -17,7 +20,7 @@ export async function gabaritRecapitulatif(total) {
         <div class="recapitulatif__ligne"><dt>Livraison en France</dt><dd>Offerte</dd></div>
         <div class="recapitulatif__ligne recapitulatif__ligne--total"><dt>Total TTC</dt><dd data-total>${euros(total)}</dd></div>
       </dl>
-      <p class="delai"><span class="icone icone--ciseaux" aria-hidden="true"></span><span>${delai}</span></p>
+      <p class="delai"><span class="icone icone--ciseaux" aria-hidden="true"></span><span>${mention}</span></p>
       <p class="recapitulatif__note">${retours} · Paiement sécurisé</p>
     </section>`;
 }

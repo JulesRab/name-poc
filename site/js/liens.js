@@ -8,12 +8,12 @@ const ROUTES = {
   accueil:    { url: 'index.html', pret: true },
   signature:  { url: 'signature.html', pret: true },
   produit:    { url: 'produit.html', pret: true },      // prompt 03
-  collection: { url: 'collection.html', pret: false },  // pas de prompt pour l'instant
-  look:       { url: 'look.html', pret: false },        // pas de prompt pour l'instant
+  collection: { url: 'collection.html', pret: true },   // ajout 04/11
+  look:       { url: 'look.html', pret: true },         // ajout 04/11
   panier:     { url: 'panier.html', pret: true },       // prompt 05
   commande:   { url: 'commande.html', pret: true },     // prompt 05
   confirmation: { url: 'confirmation.html', pret: true }, // prompt 05
-  suivi:      { url: 'suivi.html', pret: false },       // hors POC testé
+  suivi:      { url: 'suivi.html', pret: true },        // ajout 04/11, non testé
   marque:     { url: INDISPONIBLE, pret: false },       // pas d'écran prévu
 };
 

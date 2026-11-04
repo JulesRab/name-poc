@@ -156,6 +156,32 @@ CSS : `site/css/styles.css` (jetons dans `site/css/tokens.css`). Icônes : SVG F
 | Ligne panier dans le tunnel | Avec quantité | En lecture seule | Le panier se modifie sur la page panier ; le tunnel ne fait que récapituler |
 | Mention sous les champs carte | — | « Paiement fictif : un clic dans un champ vide le remplit. Rien n’est envoyé. » | Transparence du prototype pour les testeurs |
 
+## Ajout — Collection, look, suivi (04/11, hors périmètre testé)
+
+| Composant Figma | Nœud | Code |
+| --- | --- | --- |
+| Carte look (Disponible, Vendu) | 85:316 | `carteLook()` dans `js/carte-produit.js` : photo studio en pied, citation, « Look complet · prix » ou « vendu » |
+| Grille Collection 2 + 3 | 97:3085 | `ul.grille-looks` (6 colonnes en desktop : 2 cartes de 3, puis 3 de 2) |
+| Infos look (Disponible, Vendu) | 87:471 | `infosLook()` dans `js/look.js`, classes `.infos-look__*` |
+| Slider — Le Conseiller (vue 1 avec points) | 201:875 | `.vue-look` + `.point.vue-look__point` dans le slider desktop et le carrousel mobile |
+| Fiche pièce | 95:3396 | `.fiche-piece` : près du point en desktop, en bas du visuel en mobile ; croix et Échap |
+| Onglets du look | 97:3230 | Mêmes onglets / accordéons que la fiche produit |
+| Personnages (précédent, tous, suivant) | 97:3256 | `nav.personnages` |
+| Ligne panier · Look | 86:217 | `ligneLook()` dans `js/panier.js` : pas de quantité, mention « Pièces uniques · 1 exemplaire » |
+| Frise de fabrication, Étape de suivi | 114:603, 114:601 | `ol.frise`, boutons `aria-pressed` |
+| Détail d'étape (En cours, Terminée, À venir) | 114:665 | `.detail-etape`, emplacement pointillé « Les photos arrivent à cette étape. » |
+
+### Écarts de l'ajout
+
+| Sujet | Figma | Code | Raison |
+| --- | --- | --- | --- |
+| Slider du look | Défilement automatique toutes les 4 s | Flèches seules | Un défilement automatique sans bouton pause gêne la lecture (WCAG 2.2.2) et la fiche pièce ouverte |
+| Vue 1 du slider | Photo recadrée sur le buste | Photo studio entière, points relevés sur chaque photo | Mêmes positions en desktop et en mobile |
+| Gros plan de la fiche pièce | Visuel à produire | Packshot (manteau du Conseiller, fourrure du Bras-Droit) ou zoom dans la photo studio | Aucune photo de détail par pièce |
+| Textes des looks | Maquettés pour Le Conseiller | Lorem ipsum pour les quatre autres (récit, descriptions des pièces) | Demande de l'équipe (04/11) ; pages non testées |
+| Tailles des pièces | « taille unique (M) » | Le Conseiller : M ; autres : « taille unique » + [À définir] | PRD : taille exacte à définir |
+| Suivi — textes d'étape | Rédigés pour le Bombers | Généralisés (nom, tissu et taille de la pièce commandée) | Le suivi lit la dernière commande |
+
 ## À construire avec leur flow
 
-Récapitulatif, Infos look, En-tête commande, Fiche pièce, Toast, Étape de suivi, Frise de fabrication, Détail d'étape, Slider et carrousel Le Conseiller.
+Toast.

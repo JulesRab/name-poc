@@ -236,3 +236,43 @@ Une entrée par itération : date, prompt, résultat, corrections.
 **Reste à faire / à valider**
 - Suivi de fabrication (08.2 à 08.6) et Collection Outlaws (05.1 à 05.4) : hors périmètre testé.
 - Styleguide : composants des flows 1, 2 et 3 à y ajouter.
+
+## 04/11/2026 — Ajout : Collection Outlaws., pages look, suivi de fabrication, images
+
+**Demande** : « Il reste encore des pages que tu n'as pas développées comme la page Collection », puis : looks achetables (1), uniquement le look complet (2), dernier look vendu (3), lorem ipsum là où le texte manque (4), suivi = dernière commande de la session, étape par l'URL ou la frise, retour à l'accueil sans commande (5) ; remplir chaque bloc gris avec les images disponibles.
+
+**Fait**
+- Nœuds lus : 97:3061, 97:3148, 97:3085, 97:3080, 87:471, 97:3230, 97:3256, 95:3396, 201:875, 86:217 ; 204:7148 et 204:7150 (08.2), 204:7277 (08.3), 204:7386 (08.4), 117:5148 (08.5), 117:5203 (08.6).
+- Pages : `collection.html` (05.1), `look.html?l=<slug>` (05.2 à 05.4), `suivi.html?etape=<recue|tissu|coupe|assemblage|finitions>` (08.2 à 08.6). JS : `collection.js`, `look.js`, `suivi.js`, `contenus-look.js`.
+- Panier : ligne Look (`type: 'look'`, quantité fixée à 1, pas de doublon). Récapitulatif, livraison et confirmation : le délai « Fabriquée à la commande » reste affiché dès qu'une pièce Signature est dans le panier ; pour des looks seuls, « Pièces uniques existantes · expédiées sous 3 jours ouvrés ». Le lien « Suivre la fabrication » n'apparaît que pour une commande avec une pièce Signature.
+- `data/catalogue.json` : L'Homme de Main passe en `"statut": "vendu"` (demande du 04/11).
+- Liens rebranchés (`pret: true`) : collection, look, suivi ; entrée et bandeau Collection de l'accueil.
+- Images (`assets/images/`, JPG qualité 68, largeur max. 1400 à 1600 px) :
+  - packshots transmis par Noé (`ressources/`) : pull, pantalon regular, pantalon wide (dos), blouson en cuir, chemise, t-shirt, manteau du Conseiller, fourrure du Bras-Droit ;
+  - looks : 8 vues studio par personnage (`<slug>-studio-1..8.jpg`) et photos de contexte (`<slug>-contexte-n.jpg`), photos de groupe ;
+  - suivi : photos d'atelier exportées de Figma (`suivi-*.jpg`).
+- Restent en blocs gris, faute d'image fidèle : zip-up, hoodie, crewneck, débardeur (Chapitre II), schémas du guide des tailles.
+
+**Écart assumé** : lorem ipsum sur les pages look des quatre personnages non maquettés (récit, descriptions des pièces), à la demande de l'équipe. CLAUDE.md, le PRD et la recette l'interdisent devant les participants : ces pages ne sont pas dans les missions testées. À remplacer avant tout test qui passerait par la Collection.
+
+**Vérifications navigateur (Playwright, 393 et 1440 px)**
+| Action | Résultat |
+| --- | --- |
+| `collection.html` | 5 cartes (2 puis 3), citations, L'Homme de Main « Look complet · vendu » |
+| Point 1 du Conseiller | Fiche « 1 · Manteau », packshot, 1 050 € · taille unique (M) ; focus sur le titre |
+| Échap dans la fiche | Fiche fermée, focus rendu au point |
+| Acheter le look complet (2 fois) | Panneau « Ajouté à votre panier. » puis « Ce look est déjà dans votre panier. », compteur à 1 |
+| Panier look + Bombers M | Ligne Look sans quantité, total 2 450 €, délai Signature affiché |
+| Tunnel jusqu'à la confirmation | Commande NA-xxxx, lien `suivi.html?etape=recue` |
+| `suivi.html?etape=coupe` | Reçue et Tissu terminées, Coupe en cours, 2 photos |
+| `suivi.html?etape=finitions` | Assemblage en cours, Finitions à venir sélectionnée, emplacement photos |
+| Console (accueil, produit, look) | Aucune erreur |
+
+**Tests (Node)** : `tests/paiement.test.js` 8 / 8 ; `tests/taille.test.js` 12 / 12.
+
+**Recette** : missions 0 à 2 inchangées (aucun écran testé modifié hors liens et récapitulatif). Perception premium : [ ] aucun lorem ipsum — non tenu sur 4 pages look (voir ci-dessus). Accessibilité : [x] points 32 px avec zone tactile 44 px ; [x] fiche pièce au clavier ; [x] frise au clavier (`aria-pressed`) ; [x] textes alternatifs sur toutes les photos ; [ ] plugin du cours.
+
+**Reste à faire / à valider**
+- Textes des quatre looks non maquettés et taille exacte des pièces (Noé).
+- Poids des images : `assets/images` passe à 31 Mo (optimisation prévue plus tard, avec l'organisation du dossier).
+- Défilement automatique du slider du look : non repris (voir `design/composants.md`).

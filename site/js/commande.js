@@ -3,9 +3,9 @@
 // aucune requête réseau ; les données de carte ne sont jamais enregistrées.
 
 import { chargerCatalogue } from './catalogue.js';
-import { lignesDetaillees, ligneProduit } from './panier.js';
+import { lignesDetaillees, ligneProduit, avecSignature } from './panier.js';
 import { lireCommande, majCommande, finaliserCommande } from './session.js';
-import { gabaritRecapitulatif, gabaritAide, synchroniserRepli } from './recapitulatif.js';
+import { gabaritRecapitulatif, gabaritAide, synchroniserRepli, DELAI_LOOK } from './recapitulatif.js';
 import {
   CARTE_FACTICE, IDENTITE_EXPRESS, MESSAGES, ETAPES, echeances, euros, validerCoordonnees,
   adresseComplete, suggestionsAdresse, numeroCommande, etapeAutorisee,
@@ -33,7 +33,8 @@ const etape = etapeAutorisee(demandee, commande);
 if (etape !== demandee) history.replaceState(null, '', `?etape=${etape}`);
 
 const total = lignes.reduce((t, l) => t + l.produit.prix * l.quantite, 0);
-const { delai } = await chargerCatalogue();
+const signature = avecSignature(lignes);
+const delai = signature ? (await chargerCatalogue()).delai : DELAI_LOOK;
 const LIBELLES_ETAPES = { coordonnees: 'Coordonnées', livraison: 'Livraison', paiement: 'Paiement' };
 document.title = `${LIBELLES_ETAPES[etape]} — Commande — NAME.`;
 
@@ -117,7 +118,9 @@ function confirmer(coordonnees, moyen) {
     total,
     lignes: lignes.map(({ produit, taille, quantite }) => ({
       taille, quantite,
-      produit: { slug: produit.slug, nom: produit.nom, prix: produit.prix, tissu: produit.tissu },
+      produit: produit.look
+        ? { slug: produit.slug, nom: produit.nom, prix: produit.prix, look: true, detail: produit.detail, image: produit.image }
+        : { slug: produit.slug, nom: produit.nom, prix: produit.prix, tissu: produit.tissu },
     })),
   });
   // replace : le retour arrière ne repasse pas par le paiement, aucune commande recréée
@@ -247,12 +250,14 @@ function etapeLivraison() {
           <input class="radio" type="radio" name="livraison" value="domicile" checked>
           <span class="option__contenu">
             <span class="option__titre">Livraison à domicile en France</span>
-            <span class="option__description">Expédiée après fabrication · reçue sous 1 à 2 semaines après la commande</span>
+            <span class="option__description">${signature ? 'Expédiée après fabrication · reçue sous 1 à 2 semaines après la commande' : 'Pièces uniques expédiées sous 3 jours ouvrés'}</span>
           </span>
           <span class="option__valeur">Offerte</span>
         </label>
       </fieldset>
-      <p class="texte-m">Votre pièce est fabriquée à la commande : comptez environ une semaine d’atelier, puis l’expédition. Un e-mail vous prévient à chaque étape.</p>
+      <p class="texte-m">${signature
+        ? 'Votre pièce est fabriquée à la commande : comptez environ une semaine d’atelier, puis l’expédition. Un e-mail vous prévient à chaque étape.'
+        : 'Les pièces du look existent déjà : elles sont numérotées, accompagnées de leur certificat d’authenticité et expédiées sous 3 jours ouvrés.'}</p>
       <p class="delai"><span class="icone icone--ciseaux" aria-hidden="true"></span><span>${echapper(delai)}</span></p>
       <button class="bouton bouton--l bouton--pleine-largeur" type="submit">Continuer vers le paiement</button>
     </form>`;
@@ -361,7 +366,7 @@ zone.innerHTML = `
       <summary class="commande__recap-resume">Récapitulatif de commande <span>${euros(total)}</span></summary>
       <div class="commande__recap-contenu">
         <ul class="page-panier__lignes" role="list">${lignesHtml}</ul>
-        ${await gabaritRecapitulatif(total)}
+        ${await gabaritRecapitulatif(total, { signature })}
         ${gabaritAide()}
       </div>
     </details>

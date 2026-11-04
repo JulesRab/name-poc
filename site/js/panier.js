@@ -6,7 +6,8 @@ import { chargerCatalogue, produitsSignature, prix } from './catalogue.js';
 import { lirePanier, changerQuantite, retirerDuPanier } from './session.js';
 import { ouvrirVolet, initialiserVolet } from './volet.js';
 import { contenu } from './contenus-produit.js';
-import { lien, lienProduit } from './liens.js';
+import { photoCarteLook } from './contenus-look.js';
+import { lien, lienProduit, lienLook } from './liens.js';
 
 const QUANTITE_MAX = 9;
 
@@ -14,15 +15,63 @@ function echapper(texte) {
   return String(texte).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
+// Un look devient un « produit » de ligne : nom, prix, pièces, photo (Ligne panier · Look)
+export function produitLook(look) {
+  const photo = photoCarteLook(look);
+  const noms = look.pieces.map((p, i) => (i ? p.nom.toLowerCase() : p.nom)).join(' · ');
+  return {
+    slug: look.slug,
+    nom: `${look.personnage} — look complet`,
+    prix: look.prix,
+    look: true,
+    detail: `${noms} — pièces uniques, taille unique`,
+    image: photo?.src ?? null,
+  };
+}
+
 export async function lignesDetaillees() {
   const produits = await produitsSignature();
+  const { collection } = await chargerCatalogue();
   return lirePanier()
-    .map((l) => ({ ...l, produit: produits.find((p) => p.slug === l.slug) }))
+    .map((l) => {
+      if (l.type === 'look') {
+        const look = collection.looks.find((x) => x.slug === l.slug && x.statut !== 'vendu');
+        return { ...l, produit: look ? produitLook(look) : null };
+      }
+      return { ...l, produit: produits.find((p) => p.slug === l.slug) };
+    })
     .filter((l) => l.produit);
+}
+
+// Le panier contient-il au moins une pièce Signature (fabriquée à la commande) ?
+export const avecSignature = (lignes) => lignes.some((l) => !l.produit.look);
+
+function ligneLook(ligne, { lecture }) {
+  const { produit } = ligne;
+  const id = `ligne-${produit.slug}-unique`;
+  const media = produit.image
+    ? `<img class="ligne-panier__image ligne-panier__image--photo" src="${produit.image}" alt="" width="96" height="120">`
+    : '<span class="visuel ligne-panier__visuel" aria-hidden="true">Photo look</span>';
+  return `
+    <li class="ligne-panier" data-slug="${produit.slug}" data-taille="unique">
+      ${media}
+      <div class="ligne-panier__infos">
+        <div class="ligne-panier__ligne">
+          <h3 class="ligne-panier__nom" id="${id}"><a href="${lienLook(produit.slug)}">${echapper(produit.nom)}</a></h3>
+          <p class="ligne-panier__prix">${prix(produit.prix)}</p>
+        </div>
+        <p class="ligne-panier__detail">${echapper(produit.detail)}</p>
+        <span class="mention ligne-panier__mention">Pièces uniques · 1 exemplaire</span>
+        ${lecture ? '' : `<div class="ligne-panier__actions">
+          <button class="lien ligne-panier__retirer" type="button" data-retirer>Retirer<span class="visuellement-cache"> ${echapper(produit.nom)}</span></button>
+        </div>`}
+      </div>
+    </li>`;
 }
 
 // lecture : ligne figée (tunnel, confirmation), sans quantité ni « Retirer »
 export async function ligneProduit(ligne, { lecture = false } = {}) {
+  if (ligne.produit.look) return ligneLook(ligne, { lecture });
   const { produit, taille, quantite } = ligne;
   const { delai } = await chargerCatalogue();
   const vignette = contenu(produit.slug)?.vignettes?.[0];

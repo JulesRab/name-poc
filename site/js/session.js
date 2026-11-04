@@ -2,6 +2,7 @@
 // pour le testeur suivant (CLAUDE.md). Aucune donnée n'est envoyée.
 //
 // Panier : [{ slug, taille, quantite }] — une ligne par couple pièce + taille.
+//          Look : { type: 'look', slug, taille: 'unique', quantite: 1 }.
 // Profil de taille : { type: 'Veste ou manteau', mesures: { poitrine: 56, … } }
 
 const CLE_PANIER = 'name-panier';
@@ -44,6 +45,20 @@ export function ajouterAuPanier({ slug, taille, quantite = 1 }) {
   if (ligne) ligne.quantite += quantite;
   else panier.push({ slug, taille, quantite });
   ecrirePanier(panier);
+}
+
+// Look Outlaws. : pièces uniques, vendu complet. Une seule ligne, quantité fixée à 1.
+// Renvoie false si le look est déjà dans le panier.
+export function ajouterLook(slug) {
+  const panier = lirePanier();
+  if (panier.some((l) => l.type === 'look' && l.slug === slug)) return false;
+  panier.push({ type: 'look', slug, taille: 'unique', quantite: 1 });
+  ecrirePanier(panier);
+  return true;
+}
+
+export function lookDansPanier(slug) {
+  return lirePanier().some((l) => l.type === 'look' && l.slug === slug);
 }
 
 export function changerQuantite(slug, taille, quantite) {

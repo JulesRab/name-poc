@@ -79,13 +79,30 @@ export const CONTENUS = {
   },
 };
 
-// Pantalon wide : seul son packshot de face existe dans Figma (06.3 Panier)
-CONTENUS['pantalon-wide'] = {
-  vignettes: [
-    { src: `${IMG}pantalon-wide-face.png`, alt: 'Pantalon wide gris béton, vue de face, sur fond neutre', packshot: true },
-  ],
-  packshot: { src: `${IMG}pantalon-wide-face.png`, alt: 'Pantalon wide gris béton, vue de face, sur fond neutre' },
+// Autres pièces : packshots face / dos transmis par Noé (ressources/, 04/11).
+// Aucun visuel pour zip-up, hoodie, crewneck et débardeur : blocs gris conservés.
+function packshots(slug, description) {
+  const face = { src: `${IMG}${slug}-face.png`, alt: `${description}, vue de face, sur fond neutre`, packshot: true };
+  const dos = { src: `${IMG}${slug}-dos.png`, alt: `${description}, vue de dos, sur fond neutre`, packshot: true };
+  return {
+    vignettes: [face, dos],
+    packshot: face,
+    slider: [dos, face],
+    carrousel: [face, dos],
+  };
+}
+
+const PACKSHOTS = {
+  pull: 'Pull bleu nuit',
+  'pantalon-wide': 'Pantalon wide gris béton',
+  'pantalon-regular': 'Pantalon regular noir',
+  'blouson-cuir': 'Blouson en cuir noir',
+  chemise: 'Chemise blanche',
+  't-shirt': 'T-shirt',
 };
+for (const [slug, description] of Object.entries(PACKSHOTS)) {
+  CONTENUS[slug] = packshots(slug, description);
+}
 
 // Étapes de fabrication (86:273) : communes à toutes les pièces Signature
 export const ETAPES_FABRICATION = [

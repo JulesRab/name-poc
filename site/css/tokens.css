@@ -214,6 +214,20 @@
   --largeur-formulaire-commande: 712px;                     /* Formulaire du tunnel */
   --entete-commande-hauteur: 80px;                          /* En-tête commande (desktop) */
 
+  /* Ajout — Collection, look, suivi (relevés sur 05.1, 05.2, 95:3396, 08.2) */
+  --hauteur-fiche-look: 1213px;                             /* Bloc look desktop (visuel gauche 480 × 1213) */
+  --ratio-studio: 933 / 1400;                               /* [POC] Photos studio des looks */
+  --largeur-fiche-piece: 320px;                             /* Fiche pièce */
+  --hauteur-gros-plan: 180px;                               /* Fiche pièce : visuel */
+  --zoom-gros-plan: 2.6;                                    /* [POC] Gros plan recadré dans la photo studio */
+  --largeur-suivi: 1000px;                                  /* Contenu de la page suivi */
+  --visuel-suivi: 120px;                                    /* Carte pièce du suivi */
+  --point-suivi: 24px;                                      /* Point de la frise */
+  --largeur-etape-frise: 92px;                              /* [POC] Étape de la frise en mobile (défilement) */
+  --repere-etape: 80px;                                     /* Trait sous l'étape sélectionnée */
+  --hauteur-photo-etape: 320px;                             /* Photos de l'atelier */
+  --hauteur-attente-photos: 200px;                          /* « Les photos arrivent à cette étape » */
+
   /* Superposition */
   --plan-entete: 10;
   --plan-volet: 20;
