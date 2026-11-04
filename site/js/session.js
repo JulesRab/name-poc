@@ -6,6 +6,8 @@
 
 const CLE_PANIER = 'name-panier';
 const CLE_PROFIL = 'name-profil-taille';
+const CLE_COMMANDE = 'name-commande-en-cours';
+const CLE_DERNIERE = 'name-derniere-commande';
 
 function lire(cle, valeurParDefaut) {
   try {
@@ -59,6 +61,26 @@ export function lireProfil() {
 
 export function ecrireProfil(profil) {
   ecrire(CLE_PROFIL, profil, 'profil:change');
+}
+
+// Commande en cours : { coordonnees, livraison, moyen } — jamais de données de carte
+export function lireCommande() {
+  return lire(CLE_COMMANDE, {});
+}
+
+export function majCommande(champs) {
+  ecrire(CLE_COMMANDE, { ...lireCommande(), ...champs });
+}
+
+// Validation fictive : la commande est figée, le panier et la commande en cours sont vidés
+export function finaliserCommande(commande) {
+  ecrire(CLE_DERNIERE, commande);
+  ecrire(CLE_COMMANDE, {});
+  ecrirePanier([]);
+}
+
+export function derniereCommande() {
+  return lire(CLE_DERNIERE, null);
 }
 
 // Petit drapeau de session (ex. bandeau d'arrivée vu une fois par visite)

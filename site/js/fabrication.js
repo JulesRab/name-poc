@@ -6,9 +6,10 @@ import { ouvrirVolet, initialiserVolet } from './volet.js';
 import { initialiserDelais } from './delai.js';
 
 // Liste des 6 étapes + statut e-mail. Utilisée dans l'onglet de la fiche et dans le volet.
-export function gabaritEtapes({ titre = true } = {}) {
+// titre : texte du titre, ou false pour aucun titre
+export function gabaritEtapes({ titre = 'De la commande à chez vous', niveau = 'h3' } = {}) {
   return `
-    ${titre ? '<h3 class="titre-s etapes-fabrication__titre-bloc">De la commande à chez vous</h3>' : ''}
+    ${titre ? `<${niveau} class="titre-s etapes-fabrication__titre-bloc">${titre}</${niveau}>` : ''}
     <ol class="etapes-fabrication__liste">
       ${ETAPES_FABRICATION.map((e, i) => `
         <li class="etapes-fabrication__etape">

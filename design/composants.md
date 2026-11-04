@@ -131,6 +131,31 @@ CSS : `site/css/styles.css` (jetons dans `site/css/tokens.css`). Icônes : SVG F
 | Bouton « Choisir la taille » | M | Suit la taille comparée (S, M ou L) | Choisir directement la taille regardée |
 | Légende du schéma | Caractères ━ ┅ | Traits en CSS (plein / pointillé) | Rendu identique quelle que soit la police |
 
+## Flow 2 — panier, tunnel de commande, confirmation (prompt 05)
+
+| Composant Figma | Nœud | Code | États couverts |
+| --- | --- | --- | --- |
+| Récapitulatif | 86:219 | `js/recapitulatif.js` → `section.recapitulatif` (+ `.aide-commande`) | Sous-total, livraison offerte, total TTC, délai, retours ; replié au-dessus du formulaire en mobile (`details.commande__recap`) |
+| En-tête commande | 94:2790 | `header.entete-commande` (dans `js/commande.js`) | Retour au panier, logo (non cliquable : pas de sortie), Paiement sécurisé |
+| Page panier / panier vide | 95:2478 · 95:2608 | `panier.html` + `js/page-panier.js` | Lignes éditables (quantité, retirer), récapitulatif, Commander, aide ; état vide |
+| Ligne panier (lecture) | 86:217 | `ligneProduit(l, { lecture: true })` | Tunnel et confirmation : « Quantité : n », sans actions |
+| Étape du tunnel | 83:298 | `ol.etapes` ; `a.etape__lien` | Terminée (coche, cliquable), En cours (`aria-current="step"`), À venir |
+| Coordonnées / erreur | 95:2661 · 95:2814 | `commande.html?etape=coordonnees` | Paiement express (chargement puis confirmation), champs, suggestions d'adresse (clavier ↑ ↓ Échap), saisie manuelle, case non cochée, erreurs 07.2 |
+| Livraison | 95:2978 | `?etape=livraison` | Rappel des coordonnées + Modifier, option unique choisie, délai |
+| Paiement | 95:3077 | `?etape=paiement` ; `.carte-bancaire` | Carte / Apple Pay-Google Pay / 3 fois ; champs carte sous l'option (carte et 3 fois), remplissage factice au clic, échéances, erreurs |
+| Confirmation | 95:3203 | `confirmation.html` + `js/confirmation.js` | Numéro NA-xxxx, e-mail, délai + réception estimée, étapes, 3 actions, récapitulatif |
+| — | — | `js/paiement.js` (logique pure) + `tests/paiement.test.js` | Échéances, montants, validation, numéro, dates, droits d'accès aux étapes |
+
+### Écarts du flow 2
+
+| Élément | Figma | Code | Raison |
+| --- | --- | --- | --- |
+| Délai de la ligne panier | « Fabriqué… reçu sous… » | Texte du catalogue | CLAUDE.md |
+| Confirmation | Une ligne « Réception estimée » (icône ciseaux) | Délai du catalogue + réception estimée | CLAUDE.md : délai affiché à la confirmation |
+| « Payer en 3 fois » | Sans champs | Mêmes champs carte + échéances | Décision du 04/11 |
+| Ligne panier dans le tunnel | Avec quantité | En lecture seule | Le panier se modifie sur la page panier ; le tunnel ne fait que récapituler |
+| Mention sous les champs carte | — | « Paiement fictif : un clic dans un champ vide le remplit. Rien n’est envoyé. » | Transparence du prototype pour les testeurs |
+
 ## À construire avec leur flow
 
 Récapitulatif, Infos look, En-tête commande, Fiche pièce, Toast, Étape de suivi, Frise de fabrication, Détail d'étape, Slider et carrousel Le Conseiller.

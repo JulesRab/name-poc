@@ -68,8 +68,8 @@ function enTete(n) {
         <span class="icone icone--recherche" aria-hidden="true"></span>
         <span class="visuellement-cache">Rechercher</span>
       </button>
-      <a class="bouton en-tete__panier-desktop" href="${LIENS.panier}">Mon panier (<span data-compteur-panier>${n}</span>)</a>
-      <a class="en-tete__panier-mobile" href="${LIENS.panier}" aria-label="${libellePanier(n)}" data-libelle-panier>
+      <a class="bouton en-tete__panier-desktop" href="${LIENS.panier}" data-ouvrir-panier aria-haspopup="dialog">Mon panier (<span data-compteur-panier>${n}</span>)</a>
+      <a class="en-tete__panier-mobile" href="${LIENS.panier}" data-ouvrir-panier aria-haspopup="dialog" aria-label="${libellePanier(n)}" data-libelle-panier>
         <span class="en-tete__icone" aria-hidden="true"><span class="icone icone--sac"></span></span>
         <span aria-hidden="true">(<span data-compteur-panier>${n}</span>)</span>
       </a>
@@ -189,6 +189,15 @@ function monter() {
 }
 
 monter();
+
+// « Mon panier (n) » ouvre le panneau panier (prompt 05) ; le lien reste un repli vers la page
+document.addEventListener('click', async (e) => {
+  const lienPanier = e.target.closest('[data-ouvrir-panier]');
+  if (!lienPanier) return;
+  e.preventDefault();
+  const { ouvrirPanneauPanier } = await import('./panier.js');
+  ouvrirPanneauPanier(lienPanier, null);
+});
 
 // Le compteur suit le panier (ajout, quantité, retrait)
 document.addEventListener('panier:change', majCompteurPanier);

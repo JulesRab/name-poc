@@ -14,14 +14,15 @@ function echapper(texte) {
   return String(texte).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
-async function lignesDetaillees() {
+export async function lignesDetaillees() {
   const produits = await produitsSignature();
   return lirePanier()
     .map((l) => ({ ...l, produit: produits.find((p) => p.slug === l.slug) }))
     .filter((l) => l.produit);
 }
 
-export async function ligneProduit(ligne) {
+// lecture : ligne figée (tunnel, confirmation), sans quantité ni « Retirer »
+export async function ligneProduit(ligne, { lecture = false } = {}) {
   const { produit, taille, quantite } = ligne;
   const { delai } = await chargerCatalogue();
   const vignette = contenu(produit.slug)?.vignettes?.[0];
@@ -40,7 +41,7 @@ export async function ligneProduit(ligne) {
         </div>
         <p class="ligne-panier__detail">Taille ${taille} · ${echapper(produit.tissu.charAt(0).toUpperCase() + produit.tissu.slice(1))}</p>
         <p class="ligne-panier__delai">${echapper(delai)}</p>
-        <div class="ligne-panier__actions">
+        ${lecture ? `<p class="ligne-panier__detail">Quantité : ${quantite}</p>` : `<div class="ligne-panier__actions">
           <div class="quantite" role="group" aria-labelledby="${id}" aria-describedby="${id}-q">
             <button class="quantite__bouton" type="button" data-moins ${quantite <= 1 ? 'disabled' : ''}>
               <span class="icone icone--moins-16" aria-hidden="true"></span><span class="visuellement-cache">Retirer une pièce</span>
@@ -51,7 +52,7 @@ export async function ligneProduit(ligne) {
             </button>
           </div>
           <button class="lien ligne-panier__retirer" type="button" data-retirer>Retirer<span class="visuellement-cache"> ${echapper(produit.nom)}, taille ${taille}</span></button>
-        </div>
+        </div>`}
       </div>
     </li>`;
 }
@@ -77,8 +78,9 @@ function gabaritPanneau() {
             <span class="panneau-panier__montant" data-panneau-total></span>
           </div>
           <p class="panneau-panier__note">Livraison offerte en France. Total calculé à l’étape suivante, sans frais cachés.</p>
-          <a class="bouton bouton--l bouton--pleine-largeur" href="${lien('commande')}">Commander</a>
+          <a class="bouton bouton--l bouton--pleine-largeur" href="${lien('commande', { etape: 'coordonnees' })}" data-panneau-commander>Commander</a>
           <button class="bouton bouton--l bouton--secondaire bouton--pleine-largeur" type="button" data-fermer-volet>Continuer mes achats</button>
+          <a class="lien panneau-panier__voir" href="${lien('panier')}">Voir le panier</a>
         </div>
       </div>
     </dialog>`;
@@ -92,6 +94,7 @@ async function rendre(panneau, annonce) {
   panneau.querySelector('[data-panneau-total]').textContent = prix(total);
   panneau.querySelector('[data-panneau-annonce]').textContent = annonce ?? (nombre ? '' : 'Votre panier est vide.');
   panneau.querySelector('[data-panneau-annonce]').hidden = !panneau.querySelector('[data-panneau-annonce]').textContent;
+  panneau.querySelector('[data-panneau-commander]').hidden = !nombre;
   panneau.querySelector('[data-panneau-lignes]').innerHTML = (await Promise.all(lignes.map(ligneProduit))).join('');
 }
 
@@ -120,10 +123,11 @@ function panneau() {
   return p;
 }
 
-// Ouvre le panneau après un ajout (06.1)
-export async function ouvrirPanneauPanier(declencheur) {
+// Ouvre le panneau : après un ajout (06.1) ou depuis « Mon panier (n) » de l'en-tête
+export async function ouvrirPanneauPanier(declencheur, annonce = 'Ajouté à votre panier.') {
   const p = panneau();
-  await rendre(p, 'Ajouté à votre panier.');
+  await rendre(p, annonce);
   ouvrirVolet(p, declencheur);
-  p.querySelector('[data-panneau-annonce]').focus();
+  const cible = p.querySelector('[data-panneau-annonce]');
+  (cible.hidden ? p.querySelector('[data-fermer-volet]') : cible).focus();
 }

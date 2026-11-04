@@ -49,5 +49,6 @@ const formatPrix = new Intl.NumberFormat('fr-FR', {
 });
 
 export function prix(montant) {
-  return formatPrix.format(montant);
+  // Espace fine insécable (U+202F) absente de Didact Gothic → espace insécable classique
+  return formatPrix.format(montant).replace(/\u202f/g, '\u00a0');
 }

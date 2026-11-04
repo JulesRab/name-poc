@@ -79,6 +79,14 @@ export const CONTENUS = {
   },
 };
 
+// Pantalon wide : seul son packshot de face existe dans Figma (06.3 Panier)
+CONTENUS['pantalon-wide'] = {
+  vignettes: [
+    { src: `${IMG}pantalon-wide-face.png`, alt: 'Pantalon wide gris béton, vue de face, sur fond neutre', packshot: true },
+  ],
+  packshot: { src: `${IMG}pantalon-wide-face.png`, alt: 'Pantalon wide gris béton, vue de face, sur fond neutre' },
+};
+
 // Étapes de fabrication (86:273) : communes à toutes les pièces Signature
 export const ETAPES_FABRICATION = [
   { titre: 'Reçue', texte: 'Votre commande arrive à l’atelier. La pièce n’existe pas encore.' },

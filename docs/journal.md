@@ -194,3 +194,45 @@ Une entrée par itération : date, prompt, résultat, corrections.
 - Le protocole de test doit être réécrit sur le Bombers (cartes de mesures) — hors code.
 - Styleguide : composants des flows 1 et 3 à y ajouter.
 - Prochaine étape : prompt 05, flow 2 (panier, commande, confirmation).
+
+## 04/11/2026 — Vercel
+
+- Cause des images manquantes : Root Directory du projet Vercel réglé sur `site`, alors que `assets/` et `data/` sont à la racine (404, catalogue compris). Correctif : Root Directory vidé (fait par Jules) + `vercel.json` qui redirige `/` vers `/site/`. Vérifié : pages, images, icônes et `data/catalogue.json` en 200 sur name-poc.vercel.app.
+
+## 04/11/2026 — Prompt 05 : flow 2 (panier, commande, confirmation)
+
+**Décisions validées** : identité fictive du paiement express Camille Martin (camille.martin@exemple.fr, 12 rue de l’Espérance, 59100 Roubaix) ; « Payer en 3 fois » avec les champs carte ; Apple Pay / Google Pay à l'étape 4 = chargement puis confirmation.
+
+**Fait**
+- Nœuds lus : 94:2790, 86:219, 95:2478, 95:2608, 95:2675 (07.1), 95:2978 (structure) et 95:3005, 95:3088 (07.4), 95:3222 (08.1) ; 95:2661 et 95:3203 en structure au plan.
+- Exportés de Figma : packshot du Pantalon wide (`assets/images/pantalon-wide-face.png`), icône cadenas.
+- Pages : `panier.html`, `commande.html`, `confirmation.html`. JS : `paiement.js` (logique pure, testée), `recapitulatif.js`, `page-panier.js`, `commande.js`, `confirmation.js` ; `session.js` (commande en cours, dernière commande, sans données de carte), `panier.js` (lecture seule, « Voir le panier », ouverture depuis l'en-tête), `layout.js` (« Mon panier (n) » ouvre le panneau), `liens.js` (panier, commande, confirmation branchés).
+- Prix : espace fine insécable remplacée par une espace insécable (U+202F absente de Didact Gothic : « 1030 € » devenait illisible).
+
+**Tests (Node)** : `tests/paiement.test.js` 8 / 8 ; `tests/taille.test.js` 12 / 12.
+
+**Vérifications navigateur (Playwright, 393 et 1440 px)**
+| Action | Résultat |
+| --- | --- |
+| Panier Bombers M + Pantalon wide M | Sous-total 1 030 €, total TTC 1 030 € |
+| `commande.html` panier vide | Redirection vers le panier vide |
+| Continuer sans e-mail | Erreurs sous E-mail, Prénom, Nom, Adresse ; focus sur E-mail |
+| E-mail « camille@ » | Erreur de format |
+| « 12 r » dans l'adresse | 3 suggestions ; un clic remplit l'adresse |
+| Modifier à l'étape Livraison | Retour aux coordonnées, valeurs gardées |
+| `?etape=paiement` sans coordonnées | Étape Coordonnées (sans livraison validée : étape Livraison) |
+| Clic dans Numéro de carte | 4242 4242 4242 4242 ; nom pré-rempli |
+| Payer en 3 fois | 3 × 343,33 € pour 1 030 € ; 700 € → 233,33 + 233,33 + 233,34 (test Node) |
+| Payer avec champs vides | Erreurs visibles, focus sur le premier (sans remplissage automatique) |
+| Payer 1 030 € | Confirmation NA-xxxx, « entre le 11 et le 18 novembre 2026 », compteur à 0, panier vidé, aucune donnée de carte en session |
+| Retour arrière | Panier vide, aucune nouvelle commande |
+| Apple Pay à l'étape 1 | « Validation en cours… » puis confirmation (camille.martin@exemple.fr) |
+
+**Recette**
+- Mission 2 : [x] panier avec article, taille, prix, frais, total et délai · [x] 3 étapes avec indicateur · [x] erreur 07.2 · [x] champs de paiement remplis au clic · [x] aucune case pré-cochée, aucun coût ajouté (livraison offerte affichée dès le panier) · [x] confirmation avec numéro, récapitulatif et délai.
+- Perception premium : [x] aucun lorem ipsum ni libellé générique ; [x] polices chargées sur toutes les pages (y compris le tunnel) ; [x] aucun badge coloré, aucune note, aucune promo.
+- Accessibilité : [x] zones tactiles ≥ 44 px (corrigé : nom du produit dans la ligne panier, « Modifier », « Retirer ») ; [x] libellés visibles ; [x] erreurs avec icône et texte ; [x] suggestions d'adresse au clavier ; [x] focus déplacé sur le titre de la confirmation et du panier vide ; [ ] plugin du cours.
+
+**Reste à faire / à valider**
+- Suivi de fabrication (08.2 à 08.6) et Collection Outlaws (05.1 à 05.4) : hors périmètre testé.
+- Styleguide : composants des flows 1, 2 et 3 à y ajouter.

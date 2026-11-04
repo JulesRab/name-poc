@@ -3123,3 +3123,508 @@ button.lien {
 .etapes-fabrication--volet > .titre-s {
   align-self: flex-start;
 }
+
+/* 13. Flow 2 — panier, tunnel de commande, confirmation ================== */
+
+.icone--cadenas { --icone-fichier: url("../../assets/icones/cadenas.svg"); }
+
+.panneau-panier__voir {
+  align-self: center;
+}
+
+/* Récapitulatif (86:219) */
+.recapitulatif {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-3);
+  padding: var(--espace-6);
+  border: var(--trait) solid var(--couleur-bordure-defaut);
+}
+
+.recapitulatif__titre {
+  font-size: var(--titre-s);
+  line-height: var(--titre-s-interligne);
+}
+
+.recapitulatif__lignes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-3);
+  margin: 0;
+}
+
+.recapitulatif__ligne {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espace-4);
+  font-size: var(--texte-m);
+  line-height: var(--texte-m-interligne);
+}
+
+.recapitulatif__ligne dt {
+  color: var(--couleur-texte-principal);
+}
+
+.recapitulatif__ligne dd {
+  margin: 0;
+  color: var(--couleur-texte-fort);
+  white-space: nowrap;
+}
+
+.recapitulatif__ligne--total {
+  padding-top: var(--espace-3);
+  border-top: var(--trait) solid var(--couleur-bordure-defaut);
+  font-size: var(--texte-l);
+  line-height: var(--texte-l-interligne);
+}
+
+.recapitulatif__note,
+.aide-commande__contact {
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--texte-s);
+  line-height: var(--texte-s-interligne);
+}
+
+.aide-commande {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.aide-commande__contact {
+  color: var(--couleur-texte-principal);
+}
+
+/* Page panier (06.3) et panier vide (06.4) */
+.page-panier {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-12);
+  padding: var(--espace-8) var(--marge) var(--section);
+}
+
+.page-panier__articles,
+.page-panier__colonne {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-4);
+}
+
+.page-panier__articles {
+  gap: var(--espace-6);
+}
+
+.page-panier__lignes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.page-panier__lignes .ligne-panier + .ligne-panier {
+  border-top: var(--trait) solid var(--couleur-bordure-defaut);
+}
+
+.panier-vide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espace-6);
+  padding: var(--section) var(--marge);
+  text-align: center;
+}
+
+.panier-vide__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--espace-3);
+}
+
+@media (min-width: 1024px) {
+  .page-panier {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--espace-24);
+    padding-top: var(--espace-12);
+  }
+
+  .page-panier__articles {
+    flex: 1 0 0;
+    min-width: 0;
+  }
+
+  .page-panier__colonne {
+    flex: 0 0 var(--largeur-recap-panier);
+  }
+
+  .panier-vide {
+    padding-top: var(--espace-24);
+    padding-bottom: var(--espace-24);
+  }
+}
+
+/* En-tête commande (94:2790) : sans navigation, pour limiter les sorties */
+.entete-commande {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--espace-2);
+  min-height: var(--entete-hauteur);
+  padding: 0 var(--marge);
+  border-bottom: var(--trait) solid var(--couleur-bordure-defaut);
+  background: var(--couleur-fond-page);
+}
+
+.entete-commande__retour {
+  justify-self: start;
+  gap: var(--espace-2);
+  text-decoration-color: transparent;
+}
+
+.entete-commande__logo {
+  width: var(--logo-entete);
+}
+
+.entete-commande__securite {
+  --icone: var(--icone-16);
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
+  gap: var(--espace-2);
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--texte-s);
+  line-height: var(--texte-s-interligne);
+}
+
+@media (min-width: 1024px) {
+  .entete-commande {
+    min-height: var(--entete-commande-hauteur);
+    padding: 0 var(--espace-8);
+  }
+}
+
+/* Tunnel : formulaire + récapitulatif (replié au-dessus en mobile) */
+.commande {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-6);
+  padding: var(--espace-6) var(--marge) var(--section);
+}
+
+.commande__colonne {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-8);
+  min-width: 0;
+}
+
+.commande__recap {
+  border-bottom: var(--trait) solid var(--couleur-bordure-defaut);
+}
+
+.commande__recap-resume {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espace-4);
+  min-height: var(--zone-tactile);
+  color: var(--couleur-texte-fort);
+  font-family: var(--police-titre);
+  font-size: var(--bouton-l);
+  line-height: var(--bouton-l-interligne);
+  list-style: none;
+  cursor: pointer;
+}
+
+.commande__recap-resume::-webkit-details-marker {
+  display: none;
+}
+
+.commande__recap-resume span {
+  margin-left: auto;
+  font-family: var(--police-texte);
+  font-size: var(--texte-l);
+}
+
+.commande__recap-resume::after {
+  content: "";
+  width: var(--icone-20);
+  height: var(--icone-20);
+  background-color: var(--couleur-icone-principal);
+  -webkit-mask: url("../../assets/icones/chevron.svg") center / contain no-repeat;
+  mask: url("../../assets/icones/chevron.svg") center / contain no-repeat;
+  transition: transform var(--duree-courte) var(--courbe);
+}
+
+.commande__recap[open] .commande__recap-resume::after {
+  transform: rotate(180deg);
+}
+
+.commande__recap-contenu,
+.commande__recap--fixe {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-6);
+  padding-bottom: var(--espace-6);
+}
+
+.commande__recap--fixe {
+  order: 2;
+  border-bottom: 0;
+}
+
+@media (min-width: 1024px) {
+  .commande {
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--espace-24);
+    padding-top: var(--espace-12);
+  }
+
+  .commande__colonne {
+    flex: 0 1 var(--largeur-formulaire-commande);
+  }
+
+  .commande__recap {
+    flex: 0 0 var(--largeur-recap-commande);
+    border-bottom: 0;
+  }
+
+  .commande__recap-resume {
+    display: none;
+  }
+
+  .commande__recap-contenu {
+    padding-bottom: 0;
+  }
+
+  .commande--confirmation {
+    flex-direction: row;
+  }
+}
+
+/* Indicateur d'étapes : une étape terminée reste cliquable */
+.etape__lien {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espace-2);
+  min-height: var(--zone-tactile);
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: var(--espace-1);
+}
+
+.etape__lien:hover {
+  text-decoration-color: currentColor;
+}
+
+.etapes .etape {
+  min-height: var(--zone-tactile);
+}
+
+/* Paiement express (07.1) */
+.paiement-express {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-3);
+}
+
+.paiement-express__titre {
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--bouton-s);
+  line-height: var(--bouton-s-interligne);
+}
+
+.paiement-express__boutons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espace-3);
+}
+
+.commande__separation {
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--texte-s);
+  line-height: var(--texte-s-interligne);
+  text-align: center;
+}
+
+.commande__formulaire {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-4);
+}
+
+.commande__formulaire > .bouton {
+  margin-top: var(--espace-4);
+}
+
+.commande__paire {
+  display: grid;
+  gap: var(--espace-4);
+}
+
+@media (min-width: 640px) {
+  .commande__paire {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.commande__manuel {
+  align-self: flex-start;
+}
+
+/* Suggestions d'adresse (117:5031) */
+.commande__adresse {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-2);
+}
+
+.suggestions-adresse {
+  margin: 0;
+  padding: 0;
+  border: var(--trait) solid var(--couleur-bordure-forte);
+  list-style: none;
+}
+
+.suggestions-adresse li + li {
+  border-top: var(--trait) solid var(--couleur-bordure-defaut);
+}
+
+.suggestions-adresse__choix {
+  width: 100%;
+  min-height: var(--zone-tactile);
+  padding: var(--espace-3) var(--espace-4);
+  border: 0;
+  background: var(--couleur-fond-page);
+  color: var(--couleur-texte-fort);
+  font-size: var(--texte-m);
+  line-height: var(--texte-m-interligne);
+  text-align: left;
+  cursor: pointer;
+}
+
+.suggestions-adresse__choix:hover {
+  background: var(--couleur-fond-image);
+}
+
+/* Livraison (07.3) */
+.rappel-coordonnees {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espace-4);
+  padding: var(--espace-4);
+  border: var(--trait) solid var(--couleur-bordure-defaut);
+  font-size: var(--texte-m);
+  line-height: var(--texte-m-interligne);
+}
+
+.rappel-coordonnees .lien {
+  min-height: 0;
+}
+
+.commande__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-3);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* Paiement (07.4) : champs carte sous l'option choisie */
+.carte-bancaire {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-4);
+  padding: var(--espace-4) var(--espace-6);
+}
+
+.carte-bancaire__echeances {
+  color: var(--couleur-texte-fort);
+  font-size: var(--texte-m);
+  line-height: var(--texte-m-interligne);
+}
+
+.commande__mentions {
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--texte-s);
+  line-height: var(--texte-s-interligne);
+}
+
+.bouton[aria-busy="true"] {
+  cursor: progress;
+}
+
+/* Confirmation (08.1) */
+.confirmation__titres {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-3);
+}
+
+.confirmation__numero {
+  color: var(--couleur-texte-secondaire);
+  font-family: var(--police-titre);
+  font-size: var(--bouton-s);
+  line-height: var(--bouton-s-interligne);
+}
+
+.confirmation__delais {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-2);
+}
+
+.confirmation__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espace-3);
+}
+
+@media (max-width: 1023.98px) {
+  .confirmation__actions .bouton {
+    width: 100%;
+  }
+}
+
+/* Titres focalisés par script (annonce aux lecteurs d'écran) : pas de contour,
+   ils ne sont pas interactifs */
+h1[tabindex="-1"]:focus,
+h2[tabindex="-1"]:focus,
+p[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* Indicateur d'étapes du tunnel : une seule ligne en mobile */
+@media (max-width: 1023.98px) {
+  .commande .etapes {
+    flex-wrap: nowrap;
+    gap: var(--espace-3);
+  }
+
+  .commande .etape {
+    font-size: var(--bouton-s);
+    line-height: var(--bouton-s-interligne);
+  }
+}
+
+/* Zones tactiles 44 px sans décaler la mise en page (marges négatives) */
+.ligne-panier__nom a,
+.rappel-coordonnees .lien {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--zone-tactile);
+  margin-block: calc((var(--bouton-l-interligne) - var(--zone-tactile)) / 2);
+}
+
+.rappel-coordonnees .lien {
+  margin-block: calc((var(--texte-m-interligne) - var(--zone-tactile)) / 2);
+}
+
+.ligne-panier__retirer {
+  min-width: var(--zone-tactile);
+}

@@ -208,6 +208,12 @@
   --pointilles-schema: 4 3;                                 /* Motif des pointillés (SVG) */
   --legende-trait: 16px;                                    /* Échantillon de trait dans la légende */
 
+  /* Flow 2 — panier, tunnel, confirmation (relevés sur 06.3, 07.x, 08.1) */
+  --largeur-recap-panier: 400px;                            /* Colonne récapitulatif de la page panier */
+  --largeur-recap-commande: 440px;                          /* Colonne récapitulatif du tunnel */
+  --largeur-formulaire-commande: 712px;                     /* Formulaire du tunnel */
+  --entete-commande-hauteur: 80px;                          /* En-tête commande (desktop) */
+
   /* Superposition */
   --plan-entete: 10;
   --plan-volet: 20;

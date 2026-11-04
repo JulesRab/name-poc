@@ -10,8 +10,10 @@ const ROUTES = {
   produit:    { url: 'produit.html', pret: true },      // prompt 03
   collection: { url: 'collection.html', pret: false },  // pas de prompt pour l'instant
   look:       { url: 'look.html', pret: false },        // pas de prompt pour l'instant
-  panier:     { url: 'panier.html', pret: false },      // prompt 05
-  commande:   { url: 'commande.html', pret: false },    // prompt 05
+  panier:     { url: 'panier.html', pret: true },       // prompt 05
+  commande:   { url: 'commande.html', pret: true },     // prompt 05
+  confirmation: { url: 'confirmation.html', pret: true }, // prompt 05
+  suivi:      { url: 'suivi.html', pret: false },       // hors POC testé
   marque:     { url: INDISPONIBLE, pret: false },       // pas d'écran prévu
 };
 
