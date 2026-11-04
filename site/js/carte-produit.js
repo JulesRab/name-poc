@@ -62,7 +62,7 @@ export function carteLook(look, { titre = 'h3', citation = true } = {}) {
     <article class="carte-look${vendu ? ' carte-look--vendu' : ''}" data-carte>
       <div class="carte-look__media">
         ${photo
-          ? `<img class="carte-look__visuel carte-look__photo" src="${photo.src}" alt="${echapper(photo.alt)}" loading="lazy" width="933" height="1400">`
+          ? `<img class="carte-look__visuel carte-look__photo" src="${photo.src}" alt="${echapper(photo.alt)}" loading="lazy" width="1066" height="1600">`
           : `<div class="visuel carte-look__visuel" role="img" aria-label="${echapper(look.personnage)}, visuel à produire : photo look Collection, plan large, personnage en pied">Photo look Collection — plan large, personnage en pied</div>`}
         ${vendu ? '<span class="mention mention--plein carte-produit__mention">Vendu</span>' : ''}
       </div>

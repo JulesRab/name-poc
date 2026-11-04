@@ -3,7 +3,7 @@
 
 import { chargerCatalogue, produitsSignature, prix } from './catalogue.js';
 import { carteProduit, initialiserCartes } from './carte-produit.js';
-import { contenu } from './contenus-produit.js';
+import { contenu, entretienPour } from './contenus-produit.js';
 import { gabaritEtapes, ouvrirFabrication } from './fabrication.js';
 import { phraseRecommandation } from './taille.js';
 import { initialiserOnglets } from './onglets.js';
@@ -192,7 +192,7 @@ function panneaux() {
   const t = infos?.tissu;
   const ligneTissu = (libelle, valeur) => `<div class="tissu__ligne"><dt>${libelle}</dt><dd>${valeur}</dd></div>`;
 
-  const vision = infos?.vision ? `<p class="panneau-produit__vision">${echapper(infos.vision)}</p>` : `<p>${AD('Texte « Vision produit »')}</p>`;
+  const vision = infos?.vision ? `<p class="panneau-produit__vision">${echapper(infos.vision)}</p>` : `<p>${AD('Texte « L’histoire de la pièce »')}</p>`;
 
   const tissu = `
     <div class="carte-blanche tissu">
@@ -201,9 +201,9 @@ function panneaux() {
       <dl class="tissu__liste">
         ${ligneTissu('Matière', t ? echapper(t.matiere) : echapper(majuscule(produit.tissu)))}
         ${ligneTissu('Origine', t ? echapper(t.origine) : AD('Origine du deadstock'))}
-        ${ligneTissu('Fabrication', t ? echapper(t.fabrication) : AD('Lieu de fabrication'))}
-        ${ligneTissu('Encore réalisables', t?.realisables ? echapper(t.realisables) : AD('Nombre réel de pièces, à confirmer par Noé'))}
+        ${ligneTissu('Atelier', t ? echapper(t.atelier) : AD('Lieu de fabrication'))}
       </dl>
+      ${t?.serie ? `<p class="texte-m tissu__serie">${echapper(t.serie)}</p>` : ''}
       ${t?.precedents?.length ? `
         <p class="tissu__surtitre">Tissus précédents</p>
         <ul class="tissu__precedents" role="list">
@@ -222,12 +222,26 @@ function panneaux() {
       <p>Réf. : ${echapper(infos.reference)}</p>
     </div>` : `<p>${AD('Détails, composition et entretien')}</p>`;
 
-  const livraison = `<div class="carte-blanche etapes-fabrication">${gabaritEtapes()}</div>`;
+  const e = entretienPour(produit);
+  const entretien = e ? `
+    <div class="carte-blanche details entretien">
+      <p>${echapper(e.intro)}</p>
+      <ul>${e.consignes.map(([titre, texte]) => `<li><span class="entretien__titre">${titre} :</span> ${echapper(texte)}</li>`).join('')}</ul>
+      <p>${echapper(e.fin)}</p>
+    </div>` : `<p>${AD('Conseils d’entretien')}</p>`;
+
+  // Note Figma 196:12028 (04/11) : conditions sous les 6 étapes
+  const livraison = `
+    <div class="carte-blanche etapes-fabrication">
+      ${gabaritEtapes()}
+      <p class="etapes-fabrication__conditions">${echapper(catalogue.livraison)} · TVA incluse · Paiement sécurisé par carte bancaire · Retour sous 14 jours, pièce non portée.</p>
+    </div>`;
 
   return [
-    ['vision', 'Vision produit', vision],
+    ['vision', 'L’histoire de la pièce', vision],
     ['tissu', 'Tissu du moment', tissu],
     ['details', 'Détails produit', details],
+    ['entretien', 'Entretien', entretien],
     ['livraison', 'Informations de livraison', livraison],
   ];
 }

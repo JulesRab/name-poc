@@ -182,6 +182,10 @@ CSS : `site/css/styles.css` (jetons dans `site/css/tokens.css`). Icônes : SVG F
 | Tailles des pièces | « taille unique (M) » | Le Conseiller : M ; autres : « taille unique » + [À définir] | PRD : taille exacte à définir |
 | Suivi — textes d'étape | Rédigés pour le Bombers | Généralisés (nom, tissu et taille de la pièce commandée) | Le suivi lit la dernière commande |
 
+## Onglets de la fiche produit — version du 04/11 (242:13004)
+
+Cinq onglets : L'histoire de la pièce, Tissu du moment, Détails produit, Entretien, Informations de livraison (accordéons en mobile). Notes Figma 196:10635, 196:10637, 196:10639, 196:12028. Écart : l'entretien des pièces autres que le Bombers est rédigé pour le POC selon la matière (à valider par Noé).
+
 ## À construire avec leur flow
 
 Toast.

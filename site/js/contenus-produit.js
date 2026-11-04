@@ -8,16 +8,16 @@ const IMG = '../assets/images/';
 
 export const CONTENUS = {
   bombers: {
-    vision: 'Un bombers pensé comme un compagnon de route : épaules franches, volume court, une pièce qui se marque avec le temps et devient la mémoire de celle ou celui qui la porte.',
+    // Onglet « L'histoire de la pièce » (note Figma 196:10635, 04/11)
+    vision: 'Un bomber pensé comme un compagnon de route : il se marque avec le temps et devient la mémoire de celle ou celui qui le porte. Coupé à votre taille, dans un seul lot de tissu.',
 
     tissu: {
-      texte: 'La coupe reste. Le tissu change au fil des deadstocks trouvés : selon la matière disponible à la confection, sa texture ou sa teinte peut légèrement varier. Chaque série a sa matière.',
+      // Note Figma 196:10637 (04/11) : remplace le compteur de pièces réalisables par « Série en cours »
+      texte: 'La coupe reste. Le tissu change. Nous utilisons des tissus de fin de série, disponibles en quantités limitées. Une fois épuisés, ils laissent place à d’autres matières, textures et teintes. Chaque pièce a donc sa propre histoire et peut légèrement différer de la photo.',
       matiere: 'Sergé de coton, bleu marine',
       origine: 'Fin de série d’une filature des Vosges',
-      fabrication: 'Assemblée à la main à l’atelier de Roubaix',
-      // Figma : « 12 pièces dans ce tissu ». Chiffre non confirmé par Noé (PRD : à confirmer) :
-      // l'afficher serait une fausse rareté (CLAUDE.md). Laissé à définir.
-      realisables: null,
+      atelier: 'Roubaix',
+      serie: 'Série en cours.',
       precedents: [
         { nom: 'Tweed gris', image: `${IMG}tissu-precedent-tweed.jpg`, position: '62% 54%' },
         { nom: 'Drap de laine noir', image: `${IMG}tissu-precedent-drap.jpg`, position: '35% 41%' },
@@ -38,8 +38,18 @@ export const CONTENUS = {
       'Matière principale : 100 % coton',
       'Doublure : 100 % coton',
       'Bords-côtes : 95 % laine, 5 % élasthanne',
-      'Entretien : lavage à 30 °C sur l’envers, ne pas sécher en machine',
     ],
+    // Onglet « Entretien » (note Figma 196:10639, 04/11)
+    entretien: {
+      intro: 'Cette pièce est faite pour durer et mérite donc d’être entretenue.',
+      consignes: [
+        ['Lavage', 'à la main ou cycle délicat à 30 °C, du côté envers, avec une lessive douce.'],
+        ['Séchage', 'à plat ou sur cintre large, à l’abri du soleil. Pas de sèche-linge.'],
+        ['Repassage', 'fer doux, à l’envers.'],
+        ['Rangement', 'sur cintre large, dans un endroit aéré.'],
+      ],
+      fin: 'Elle se patine, c’est voulu : les premiers plis font partie de son histoire. Une retouche, une réparation ? L’atelier s’en occupe.',
+    },
     reference: 'SIG-I-BMB',
 
     // Carte produit (liste, accueil, recherche) : packshots face / dos
@@ -113,6 +123,48 @@ export const ETAPES_FABRICATION = [
   { titre: 'Finitions', texte: 'Ourlets, boutons, repassage, contrôle.' },
   { titre: 'Expédition', texte: 'Elle part chez vous, 1 à 2 semaines après la commande.' },
 ];
+
+// Entretien des autres pièces, selon la matière du tissu du moment.
+// Textes rédigés pour le POC à la demande de l'équipe (04/11), à valider par Noé.
+const FIN_ENTRETIEN = 'Une retouche, une réparation ? L’atelier s’en occupe.';
+const ENTRETIEN_MATIERE = [
+  { si: /cuir/, entretien: {
+    intro: 'Le cuir vit avec vous : il s’assouplit et se patine au fil des saisons.',
+    consignes: [
+      ['Nettoyage', 'ne pas laver. Dépoussiérer avec un chiffon doux et sec ; pour une tache, consulter un spécialiste du cuir.'],
+      ['Soin', 'nourrir deux fois par an avec un baume neutre, appliqué en fine couche.'],
+      ['Pluie', 'laisser sécher à température ambiante, loin d’une source de chaleur.'],
+      ['Rangement', 'sur cintre large, dans une housse en coton, jamais sous plastique.'],
+    ],
+    fin: `Les marques et la patine font partie de son histoire. ${FIN_ENTRETIEN}`,
+  } },
+  { si: /laine|maille/, entretien: {
+    intro: 'La laine se lave peu : elle s’aère et se défroisse d’elle-même.',
+    consignes: [
+      ['Lavage', 'à la main à l’eau froide ou cycle laine à 30 °C, avec une lessive spéciale laine. Nettoyage à sec possible.'],
+      ['Séchage', 'à plat sur une serviette, sans essorer ni tordre. Pas de sèche-linge.'],
+      ['Repassage', 'à la vapeur, fer doux, avec une pattemouille.'],
+      ['Rangement', 'aéré après chaque port ; plié pour une maille, sur cintre pour un pantalon.'],
+    ],
+    fin: `Un léger boulochage peut apparaître : il s’enlève au peigne à laine. ${FIN_ENTRETIEN}`,
+  } },
+  { si: /coton|molleton|jersey|popeline/, entretien: {
+    intro: 'Cette pièce est faite pour durer et mérite donc d’être entretenue.',
+    consignes: [
+      ['Lavage', 'cycle délicat à 30 °C, du côté envers, avec des couleurs proches.'],
+      ['Séchage', 'à plat ou sur cintre, à l’abri du soleil. Pas de sèche-linge.'],
+      ['Repassage', 'fer moyen, à l’envers.'],
+      ['Rangement', 'plié ou sur cintre, dans un endroit aéré.'],
+    ],
+    fin: `Le coton s’adoucit au fil des lavages. ${FIN_ENTRETIEN}`,
+  } },
+];
+
+export function entretienPour(produit) {
+  return CONTENUS[produit.slug]?.entretien
+    ?? ENTRETIEN_MATIERE.find((m) => m.si.test(produit.tissu))?.entretien
+    ?? null;
+}
 
 export function contenu(slug) {
   return CONTENUS[slug] ?? null;

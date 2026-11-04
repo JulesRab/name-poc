@@ -126,9 +126,17 @@ export function citationLook(slug) {
   return LOOKS[slug]?.citation ?? null;
 }
 
+// Photos des cartes de la Collection, exportées de Figma (05.1, 199:8180)
+const CARTES = {
+  'le-parrain': 'Le Parrain en long manteau sombre, appuyé sur une canne, devant un comptoir',
+  'le-bras-droit': 'Le Bras-Droit en manteau de fourrure, verre à la main, dans un salon sombre',
+  'le-conseiller': 'Le Conseiller en manteau rayé ceinturé, mallette noire à la main',
+  'le-baron': 'Le Baron en veste de cuir noir, le regard baissé',
+  'l-homme-de-main': 'L’Homme de Main en bombers, assis sur une caisse devant un mur de briques',
+};
+
 export function photoCarteLook(look) {
-  const c = LOOKS[look.slug];
-  return c ? { src: studio(look.slug, c.face), alt: `${look.personnage}, look complet en pied` } : null;
+  return CARTES[look.slug] ? { src: `${IMG}${look.slug}-carte.jpg`, alt: CARTES[look.slug] } : null;
 }
 
 export const ALLIANCE = 'Alliance MOR Joaillerie portée sur les photos';

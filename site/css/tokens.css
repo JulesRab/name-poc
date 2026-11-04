@@ -215,6 +215,8 @@
   --entete-commande-hauteur: 80px;                          /* En-tête commande (desktop) */
 
   /* Ajout — Collection, look, suivi (relevés sur 05.1, 05.2, 95:3396, 08.2) */
+  --hauteur-media-look: 560px;                              /* [POC] Média des cartes look en mobile ; 848 px en desktop (05.1) */
+  --largeur-vision-collection: 720px;                       /* Intro Collection (05.1) */
   --hauteur-fiche-look: 1213px;                             /* Bloc look desktop (visuel gauche 480 × 1213) */
   --ratio-studio: 933 / 1400;                               /* [POC] Photos studio des looks */
   --largeur-fiche-piece: 320px;                             /* Fiche pièce */
@@ -260,6 +262,9 @@
     --logo-pied: 720px;                                     /* 720 × 302 */
     --pied-marge: 96px;
     --pied-marge-verticale: 64px;
+
+    /* Collection — mode Desktop */
+    --hauteur-media-look: 848px;
   }
 }
 

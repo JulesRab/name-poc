@@ -276,3 +276,31 @@ Une entrée par itération : date, prompt, résultat, corrections.
 - Textes des quatre looks non maquettés et taille exacte des pièces (Noé).
 - Poids des images : `assets/images` passe à 31 Mo (optimisation prévue plus tard, avec l'organisation du dossier).
 - Défilement automatique du slider du look : non repris (voir `design/composants.md`).
+
+## 04/11/2026 — Onglets de la fiche produit : commentaires Figma (section 242:13004)
+
+**Demande** : prendre en compte les notes de la section « 04 — Fiche produit (PDP) Onglet — version du 04/11/2026 ». Décisions : inventer un entretien cohérent pour les autres pièces ; « Série en cours » en phrase sous la liste ; texte « bomber » recopié tel quel.
+
+**Fait** (`js/produit.js`, `js/contenus-produit.js`, `css/styles.css`)
+- « Vision produit » devient « L'histoire de la pièce » ; nouveau texte du Bombers (note 196:10635).
+- Tissu du moment : nouveau texte, ligne « Atelier : Roubaix », « Série en cours. » à la place du compteur de pièces réalisables (note 196:10637).
+- Nouvel onglet « Entretien » entre « Détails produit » et « Informations de livraison » (note 196:10639) ; la ligne d'entretien quitte la composition du Bombers.
+- Informations de livraison : « Livraison offerte en France · TVA incluse · Paiement sécurisé par carte bancaire · Retour sous 14 jours, pièce non portée. » sous les 6 étapes, sur toutes les fiches (note 196:12028).
+
+**Contenu inventé, à valider par Noé** : entretien des autres pièces, rédigé selon la matière du tissu du moment (cuir : blouson ; laine et maille : pull, pantalons, crewneck ; coton : chemise, Chapitre II).
+
+**Vérifications** (Playwright) : 5 onglets sur une ligne à 1440 et 1024 px ; 5 accordéons à 393 px, sans défilement horizontal ; textes du Bombers conformes aux notes ; hoodie → entretien coton.
+
+## 04/11/2026 — Collection : mise en page reprise du Figma (section 199:8172)
+
+**Demande** : la mise en page de la page Collection ne correspondait pas à la maquette.
+
+**Fait**
+- Nœuds lus : 199:8172 (structure), 199:8175 (introduction), 199:8181 et 199:8184 (rangées de cartes).
+- Introduction centrée : surtitre « Collection I », titre 48 px, texte sur 720 px, mention en gris ; marges de 96 px en desktop.
+- Grille 2 + 3 : média à hauteur fixe de 848 px sur les deux rangées (608 × 848 puis 395 × 848), gouttière 32 px, 64 px entre les rangées. Mobile : une colonne, média de 560 px [POC].
+- Photos des cartes exportées de Figma (`assets/images/<slug>-carte.jpg`) à la place des vues studio ; elles servent aussi aux lignes panier et à la recherche.
+
+**Vérifications** (Playwright) : 1440 px, dimensions des médias identiques à la maquette ; 393 px, pas de défilement horizontal.
+
+**Notes Figma vues dans la même section, non traitées (pages look)** : « bien placer les hot spots sur les éléments du vêtement », « animer le slider », « enlever les hot spots » de la mosaïque (déjà sans point dans le code).
