@@ -7,10 +7,11 @@ export const INDISPONIBLE = 'indisponible.html';
 const ROUTES = {
   accueil:    { url: 'index.html', pret: true },
   signature:  { url: 'signature.html', pret: true },
-  produit:    { url: 'produit.html', pret: false },     // prompt 03
+  produit:    { url: 'produit.html', pret: true },      // prompt 03
   collection: { url: 'collection.html', pret: false },  // pas de prompt pour l'instant
   look:       { url: 'look.html', pret: false },        // pas de prompt pour l'instant
   panier:     { url: 'panier.html', pret: false },      // prompt 05
+  commande:   { url: 'commande.html', pret: false },    // prompt 05
   marque:     { url: INDISPONIBLE, pret: false },       // pas d'écran prévu
 };
 

@@ -189,3 +189,6 @@ function monter() {
 }
 
 monter();
+
+// Le compteur suit le panier (ajout, quantité, retrait)
+document.addEventListener('panier:change', majCompteurPanier);

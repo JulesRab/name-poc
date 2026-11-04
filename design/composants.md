@@ -78,6 +78,38 @@ CSS : `site/css/styles.css` (jetons dans `site/css/tokens.css`). Icônes : SVG F
 | Carte look | Citation du personnage | Non affichée | Absente du catalogue (pas d'invention) |
 | Savoir-faire | 200:3782, 213:7767 | Non utilisé sur l'accueil | Bloc de la fiche produit (description Figma) : prompt 03 |
 
+## Flow 1 — fiche produit vers panier (prompt 03)
+
+| Composant Figma | Nœud | Code | États couverts |
+| --- | --- | --- | --- |
+| Infos produit | 87:387 | `js/produit.js` → `.infos` (`__entete`, `__tissu`, `__variation`, `__choix`, `__achat`, `__conditions`) | Initial (« Choisir ma taille »), Taille choisie (« Taille : M », « Ajouter au panier — 700 € »), Erreur (tailles en erreur + message, sans blocage), À venir (Chapitre II : mention, « Tissu prévu », « Être prévenu de la sortie »). Taille recommandée : prompt 04 |
+| Slider — Bombers | 201:742 | `.galerie__slider` (flèches, compteur, mention « Inspiration ») | 4 photos ; blocs gris pour les autres pièces |
+| Carrousel mobile — Bombers | 208:832 | `.carrousel` (défilement natif, `scroll-snap`, points) | Face, dos, puis visuels en contexte |
+| Visuel packshot (colonne gauche) | 98:3534 | `.galerie__gauche` | Packshot face sur fond image |
+| Savoir-faire | 200:3782 · 213:7767 | `section#fabrication.savoir-faire` | 4 colonnes desktop, empilé en mobile ; ancre « fabrication » |
+| Onglets (fiche) | 115:4925 | `.panneaux-produit` : onglets ARIA en desktop, `<details>` en mobile | Vision produit, Tissu du moment, Détails produit, Informations de livraison |
+| Tissu du moment | 86:241 | `.carte-blanche.tissu` | Matière, origine, fabrication, encore réalisables (À définir), tissus précédents |
+| Étapes de fabrication | 86:273 | `.etapes-fabrication` | 6 étapes + statut e-mail |
+| Mosaïque + points | 130:10321 · 142:10461 · 04.1 Hotspots | `.mosaique`, `a.mosaique__point` | 5 photos ; points 1 et 2 vers Bombers et Pantalon wide |
+| Panneau panier | 89:299 | `js/panier.js` → `dialog#panneau-panier.volet.volet--large` | Après ajout (annonce, ligne, sous-total, Commander, Continuer) ; quantité, retrait ; plein écran mobile |
+| Ligne panier (Signature) | 86:217 | `ligneProduit()` → `li.ligne-panier` | Taille, tissu, délai, quantité, retirer |
+| Guide des tailles — Tableau | 89:349 | `js/guide-tailles.js` → `dialog#guide-tailles.volet--large.volet--bas` | Tableau des mesures (catalogue) ; onglet Ma référence en attente (prompt 04) ; monte du bas en mobile |
+| Bandeau d'arrivée | 113:972 | `.bandeau-arrivee` (`?src=qr` ou `instagram`) | Affiché une fois par visite (`sessionStorage`), fermable |
+
+### Écarts du flow 1
+
+| Élément | Figma | Code | Raison |
+| --- | --- | --- | --- |
+| Tissu du moment de la fiche | « laine bouillie anthracite » | Catalogue : « sergé de coton bleu marine » | Le catalogue fait foi pour les données |
+| Délai de la ligne panier | « Fabriqué à la commande · reçu sous… » | Texte du catalogue (« Fabriquée… chez vous sous… ») | CLAUDE.md |
+| « Encore réalisables » | « 12 pièces dans ce tissu » | [À définir] | Chiffre non confirmé (PRD) : fausse rareté interdite (CLAUDE.md) |
+| Lien « En savoir plus » (tissu) | Volet fabrication 04.8 | Ouvre l'onglet « Tissu du moment » | Volet fabrication au prompt 04 |
+| « Trouver ma taille » | Vue Ma référence | Ouvre le guide sur l'onglet Ma référence, contenu [À définir] | Prompt 04 |
+| Titre des étapes | Playfair Display SC italique | Romain | Une seule graisse/style chargé (jetons) |
+| Cartes des onglets | Fond blanc en dur | `--couleur-fond-carte` (#FFFFFF, ajouté aux jetons) | Pas de variable Figma |
+| Carte produit du Bombers | Bloc gris | Packshots face / dos exportés | Décision : photos Figma dès qu'elles existent |
+| Mosaïque mobile | Pas de maquette | Grille 2 colonnes, points listés sous la mosaïque | Lisibilité au toucher |
+
 ## À construire avec leur flow
 
-Ligne panier, Récapitulatif, Tissu du moment, Étapes de fabrication, Infos produit, Infos look, En-tête commande, Fiche pièce, Mosaïque, Point mosaïque, Panneau panier, Guide des tailles, Volet fabrication, Toast, Bandeau d'arrivée, Étape de suivi, Frise de fabrication, Détail d'étape, Savoir-faire, Sliders et carrousels.
+Récapitulatif, Infos look, En-tête commande, Fiche pièce, Guide des tailles (Ma référence, Comparaison), Volet fabrication, Toast, Étape de suivi, Frise de fabrication, Détail d'étape, Slider et carrousel Le Conseiller.

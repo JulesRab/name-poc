@@ -111,3 +111,39 @@ Une entrée par itération : date, prompt, résultat, corrections.
 - Décisions : phrase de marque laissée sous les entrées pour l'instant ; performance optimisée plus tard ; **photos des maquettes exportées de Figma dès qu'elles existent** (organisation de `assets/` plus tard).
 - Exportées de Figma (nœuds 90:157, 90:170, 90:227), recompressées (q70) : `assets/images/accueil-{signature,collection,outlaws}.jpg` + versions `-mobile`. 113 à 625 Ko ; bandeau en `loading="lazy"`, entrée Signature en `fetchpriority="high"`.
 - Dégradé adouci (plein sombre aux trois quarts) pour laisser voir les photos ; texte blanc lisible vérifié en 393 et 1440 px.
+
+## 04/11/2026 — Prompt 03 : flow 1 (fiche produit vers panier)
+
+**Demande** : fiche produit et ajout au panier. Le fichier `prompts/03-flow-1.md` étant vide, plan construit depuis CLAUDE.md, routes, recette (mission 1), PRD et maquettes, validé avant de coder.
+
+**Décisions validées**
+- Guide des tailles construit dès maintenant avec la vue « Tableau des mesures » (04.4) ; « Ma référence », recommandation et comparaison au prompt 04.
+- Volet fabrication (04.8) au prompt 04 ; en attendant, le lien du tissu ouvre l'onglet « Tissu du moment ».
+- Bandeau d'arrivée `?src=qr` (04.9) intégré.
+
+**Fait**
+- Nœuds lus : 98:3530 et 204:5685 (structure), 87:387, 201:742, 208:832, 98:3534, 115:4925, 130:10321, 203:4764, 203:4770, 98:3561, 89:299, 113:749 (structure) puis 89:349, 113:972.
+- Photos exportées de Figma (`assets/images/`) : `bombers-face.png`, `bombers-dos.png`, `bombers-contexte-1..3.jpg`, `bombers-mosaique-1..5.jpg`, `tissu-precedent-{tweed,drap,velours}.jpg`. Icônes : couches, ciseaux 24, repère, appareil photo, info, courriel.
+- `produit.html` + `js/produit.js` (une page pour toutes les pièces), `js/contenus-produit.js` (textes du Bombers transcrits de Figma, hors catalogue), `js/panier.js`, `js/guide-tailles.js` ; `js/session.js` (écriture du panier), `js/liens.js` (route produit branchée, route commande ajoutée), `js/carte-produit.js` (packshots du Bombers), jetons et styles.
+
+**Vérifications (Playwright, 393 et 1440 px)**
+- [x] Accueil → fiche du Bombers en 1 action (carte de l'accueil).
+- [x] La fiche affiche nom, prix, tissu du moment, tailles XS à XL, délai, livraison et retours.
+- [x] « Choisir ma taille » sans taille : erreur 04.3 (tailles en erreur, message, focus sur XS), sans blocage.
+- [x] Choix de M : « Taille : M », bouton « Ajouter au panier — 700 € ».
+- [x] Ajout : panneau 06.1 ouvert, compteur de l'en-tête à 1, `sessionStorage` = `[{bombers, M, 1}]`. Quantité + : 2, 1 400 €, compteur à 2.
+- [x] Guide en volet (depuis le bas en mobile) avec les valeurs du catalogue. [ ] Onglet « Ma référence », recommandation M et écarts : prompt 04.
+- [x] Chapitre II (Hoodie) : variante À venir, pas de tailles, « Être prévenu de la sortie » amène au formulaire.
+- [x] `?src=qr` : bandeau affiché, fermé une fois par visite, focus rendu au nom du produit.
+- [x] Slug inconnu → `indisponible.html`, sans erreur console. Aucune zone tactile < 44 px (393 px). Console propre.
+
+**Liens temporaires vers `indisponible.html`**
+- « Commander » du panneau panier et « Mon panier » → prompt 05. « Conditions de retour », « Entre deux tailles ? Écrire à l'atelier » → pas d'écran prévu.
+- Les fiches produit sont désormais branchées partout (cartes, suggestions de recherche, points de la mosaïque).
+
+**Reste à faire / à valider**
+- « Encore réalisables » laissé [À définir] : chiffre réel à confirmer par Noé.
+- Textes éditoriaux (vision, détails, tissu) des pièces autres que le Bombers : [À définir].
+- Contenus éditoriaux dans `js/contenus-produit.js` : à migrer dans `data/catalogue.json` si l'équipe le valide.
+- Styleguide : composants du flow 1 à y ajouter.
+- Prochaine étape : prompt 04, flow 3 (guide « Ma référence », recommandation, comparaison, volet fabrication) — fichier de prompt vide.

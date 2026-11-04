@@ -4,6 +4,7 @@
 
 import { prix } from './catalogue.js';
 import { lienProduit, lienLook } from './liens.js';
+import { contenu } from './contenus-produit.js';
 
 // Visuels à produire : blocs gris avec leur contenu attendu (composant Visuel).
 const VISUELS_PRODUIT = ['Packshot face — fond neutre', 'Packshot dos — fond neutre'];
@@ -17,14 +18,17 @@ function echapper(texte) {
 export function carteProduit(produit, { titre = 'h3' } = {}) {
   const id = `carte-${produit.slug}-${++compteur}`;
   const aVenir = produit.statut === 'a-venir';
-  const visuels = VISUELS_PRODUIT;
+  // Photos exportées de Figma quand elles existent, sinon blocs gris (composant Visuel)
+  const photos = contenu(produit.slug)?.vignettes;
+  const visuels = photos ?? VISUELS_PRODUIT;
   const plusieurs = visuels.length > 1;
 
   return `
     <article class="carte-produit" data-carte>
       <div class="carte-produit__media">
-        ${visuels.map((texte, i) => `
-          <div class="visuel carte-produit__visuel" role="img" aria-label="${echapper(produit.nom)}, visuel à produire : ${echapper(texte)}"${i ? ' hidden' : ''}>${echapper(texte)}</div>`).join('')}
+        ${visuels.map((v, i) => photos
+          ? `<img class="carte-produit__visuel carte-produit__photo" src="${v.src}" alt="${echapper(v.alt)}" loading="lazy" width="765" height="1024"${i ? ' hidden' : ''}>`
+          : `<div class="visuel carte-produit__visuel" role="img" aria-label="${echapper(produit.nom)}, visuel à produire : ${echapper(v)}"${i ? ' hidden' : ''}>${echapper(v)}</div>`).join('')}
         ${aVenir ? '<span class="mention mention--plein carte-produit__mention">À venir · août 2027</span>' : ''}
         ${plusieurs ? `
           <button class="carte-produit__fleche carte-produit__fleche--gauche" type="button" data-precedent aria-controls="${id}-compte">
