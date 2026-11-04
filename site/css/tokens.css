@@ -1,32 +1,209 @@
 /* ==========================================================================
    NAME. — Jetons du design system
    --------------------------------------------------------------------------
-   Seul fichier où une couleur, une taille, un espacement ou un rayon peut
-   être écrit en dur. Tout le reste du CSS utilise ces variables.
+   Seul fichier où une couleur, une taille, un espacement ou une durée peut
+   être écrit en dur. styles.css n'utilise que les variables « rôle »
+   (--couleur-…, --titre-…, --espace-…), jamais --palette-… directement.
 
-   Source : variables Figma de la page DA (0:1) et du UI kit (81:205).
-   Rempli au prompt 01, étape 1. Le nom Figma de chaque variable est noté
-   en commentaire à côté de la propriété CSS.
+   Source : variables Figma, fichier 20261103_NAME.ATELIER_, lues le 04/11/2026
+   (collections Palette, Couleurs, Typographie, Espacements).
+   Le nom Figma de chaque variable est noté en commentaire.
 
-   Organisation prévue :
-   1. Couleurs        --couleur-…   (collection Figma « Couleurs »)
-   2. Typographie     --police-…, --titre-…, --texte-…, --bouton-…
-   3. Espacements     --espace-…
-   4. Rayons, bordures, ombres
-   5. Mise en page    largeurs, gouttières, hauteur de l'en-tête
-   6. Animations      durées et courbes (discrètes)
+   Modes : valeurs « Mobile » par défaut (mobile d'abord, 393 px), valeurs
+   « Desktop » dans la media query à partir de 1024 px.
 
-   Modes : les valeurs du mode « Mobile » s'appliquent par défaut (mobile
-   d'abord, 393 px). Celles du mode « Desktop » sont redéfinies dans la
-   media query ci-dessous, à partir de 1024 px.
+   [POC] = choix du prototype, absent de Figma, validé le 04/11/2026.
    ========================================================================== */
 
 :root {
-  /* Mode Mobile (par défaut) — à remplir au prompt 01 */
+  /* ------------------------------------------------------------------------
+     1. Palette (collection « Palette », mode Valeur)
+     Valeurs brutes : ne pas utiliser hors de ce fichier.
+     ------------------------------------------------------------------------ */
+  --palette-blanc-casse: #F5F4F0;          /* neutre/blanc-casse */
+  --palette-blanc-fume: #F5F5F5;           /* neutre/blanc-fume */
+  --palette-sable-200: #E4E2DC;            /* neutre/sable-200 */
+  --palette-sable-300: #D6D3CC;            /* neutre/sable-300 */
+  --palette-gris-400: #C2C2C2;             /* neutre/gris-400 */
+  --palette-gris-600: #6B6B6B;             /* neutre/gris-600 */
+  --palette-gris-700: #424242;             /* neutre/gris-700 */
+  --palette-gris-800: #3F3F3F;             /* neutre/gris-800 */
+  --palette-gris-900: #111111;             /* neutre/gris-900 */
+  --palette-noir: #0A0A0A;                 /* neutre/noir */
+  --palette-rouge-700: #8E2A1F;            /* rouge/700 */
+  --palette-gris-900-voile: rgb(17 17 17 / 0.45); /* neutre/gris-900-voile */
+
+  /* ------------------------------------------------------------------------
+     2. Couleurs (collection « Couleurs », mode Clair)
+     ------------------------------------------------------------------------ */
+  /* Fonds */
+  --couleur-fond-page: var(--palette-blanc-casse);         /* fond/page */
+  --couleur-fond-surface: var(--palette-blanc-casse);      /* fond/surface */
+  --couleur-fond-inverse: var(--palette-gris-900);         /* fond/inverse */
+  --couleur-fond-image: var(--palette-sable-200);          /* fond/image */
+  --couleur-fond-image-survol: var(--palette-sable-300);   /* fond/image-survol */
+  --couleur-fond-voile: var(--palette-gris-900-voile);     /* fond/voile */
+
+  /* Textes */
+  --couleur-texte-principal: var(--palette-gris-800);      /* texte/principal */
+  --couleur-texte-fort: var(--palette-gris-900);           /* texte/fort */
+  --couleur-texte-secondaire: var(--palette-gris-600);     /* texte/secondaire — 4,8:1 sur fond/page */
+  --couleur-texte-desactive: var(--palette-gris-400);      /* texte/desactive */
+  --couleur-texte-inverse: var(--palette-blanc-fume);      /* texte/inverse */
+  --couleur-texte-inverse-secondaire: var(--palette-gris-400); /* texte/inverse-secondaire */
+  --couleur-texte-erreur: var(--palette-rouge-700);        /* texte/erreur — 7,6:1 sur fond/page */
+
+  /* Bordures */
+  --couleur-bordure-defaut: var(--palette-gris-400);       /* bordure/defaut — séparateurs uniquement (1,7:1) */
+  --couleur-bordure-forte: var(--palette-gris-900);        /* bordure/forte */
+  --couleur-bordure-erreur: var(--palette-rouge-700);      /* bordure/erreur */
+  /* [POC] Contour des champs, cases, options et tailles : AA demande 3:1
+     pour un composant d'interface. Écart volontaire à Figma (bordure/defaut). */
+  --couleur-bordure-champ: var(--palette-gris-600);        /* = texte/secondaire, 4,8:1 */
+
+  /* Actions */
+  --couleur-action-principal: var(--palette-gris-900);         /* action/principal */
+  --couleur-action-principal-survol: var(--palette-gris-800);  /* action/principal-survol */
+  --couleur-action-principal-presse: var(--palette-gris-700);  /* action/principal-presse */
+  --couleur-action-desactive: var(--palette-gris-400);         /* action/desactive */
+
+  /* Icônes */
+  --couleur-icone-principal: var(--palette-gris-900);      /* icone/principal */
+  --couleur-icone-inverse: var(--palette-blanc-fume);      /* icone/inverse */
+  --couleur-icone-erreur: var(--palette-rouge-700);        /* icone/erreur */
+
+  /* [POC] Focus visible */
+  --couleur-focus: var(--couleur-bordure-forte);
+  --couleur-focus-inverse: var(--couleur-texte-inverse);
+
+  /* ------------------------------------------------------------------------
+     3. Typographie (collection « Typographie »)
+     Une seule graisse : Regular (graisse/regular).
+     ------------------------------------------------------------------------ */
+  --police-titre: "Playfair Display SC", Georgia, "Times New Roman", serif; /* famille/titre */
+  --police-texte: "Didact Gothic", "Helvetica Neue", Arial, sans-serif;     /* famille/texte */
+  --graisse-regular: 400;                                   /* graisse/regular */
+
+  /* Titres — mode Mobile */
+  --titre-xl: 32px;  --titre-xl-interligne: 40px;           /* taille|interligne/titre/xl */
+  --titre-l: 28px;   --titre-l-interligne: 36px;            /* taille|interligne/titre/l */
+  --titre-m: 22px;   --titre-m-interligne: 30px;            /* taille|interligne/titre/m */
+  --titre-s: 18px;   --titre-s-interligne: 26px;            /* taille|interligne/titre/s */
+
+  /* Texte courant, prix, formulaires — identiques dans les deux modes.
+     Interlignes tirés des variables (les styles Figma Text/* sont en « auto »). */
+  --texte-l: 16px;   --texte-l-interligne: 24px;            /* taille|interligne/texte/l */
+  --texte-m: 14px;   --texte-m-interligne: 20px;            /* taille|interligne/texte/m */
+  --texte-s: 12px;   --texte-s-interligne: 16px;            /* taille|interligne/texte/s */
+
+  /* Boutons — identiques dans les deux modes */
+  --bouton-l: 16px;  --bouton-l-interligne: 20px;           /* taille|interligne/bouton/l */
+  --bouton-m: 14px;  --bouton-m-interligne: 18px;           /* taille|interligne/bouton/m */
+  --bouton-s: 12px;  --bouton-s-interligne: 16px;           /* taille|interligne/bouton/s */
+
+  /* ------------------------------------------------------------------------
+     4. Espacements (collection « Espacements »)
+     ------------------------------------------------------------------------ */
+  --espace-1: 4px;                                          /* espace/1 */
+  --espace-2: 8px;                                          /* espace/2 */
+  --espace-3: 12px;                                         /* espace/3 */
+  --espace-4: 16px;                                         /* espace/4 */
+  --espace-6: 24px;                                         /* espace/6 */
+  --espace-8: 32px;                                         /* espace/8 */
+  --espace-12: 48px;                                        /* espace/12 */
+  --espace-16: 64px;                                        /* espace/16 */
+  --espace-24: 96px;                                        /* espace/24 */
+  --espace-32: 128px;                                       /* espace/32 */
+
+  /* Mise en page — mode Mobile */
+  --marge: 20px;                                            /* mise-en-page/marge */
+  --gouttiere: 12px;                                        /* mise-en-page/gouttiere */
+  --section: 64px;                                          /* mise-en-page/section */
+
+  /* Composants */
+  --hauteur-champ: 52px;                                    /* composant/hauteur-champ */
+  --zone-tactile: 44px;                                     /* composant/zone-tactile */
+
+  /* ------------------------------------------------------------------------
+     5. Rayons, traits, focus
+     Figma n'a pas de variables de rayon : valeurs relevées sur les composants
+     du UI kit à l'étape 2 et ajoutées ici.
+     ------------------------------------------------------------------------ */
+  --trait: 1px;                                             /* contours (UI kit) */
+  --trait-fort: 1.5px;                                      /* Champ Focus, Option Sélectionnée (UI kit) */
+  --rayon: 0;                                               /* « angles droits » (description Button) */
+  --rayon-rond: 50%;                                        /* Point, pastille d'étape */
+  --focus-epaisseur: 2px;                                   /* [POC] */
+  --focus-decalage: 2px;                                    /* [POC] */
+
+  /* ------------------------------------------------------------------------
+     5 bis. Dimensions des composants (relevées sur le UI kit, 04/11/2026)
+     ------------------------------------------------------------------------ */
+  /* Icônes */
+  --icone-14: 14px;                                         /* alert-circle, check */
+  --icone-16: 16px;                                         /* Button M, Quantité */
+  --icone-18: 18px;                                         /* scissors */
+  --icone-20: 20px;                                         /* Button L, chevron, plus/minus */
+  --icone-22: 22px;                                         /* en-tête : menu, search, bag, x */
+  --icone-24: 24px;                                         /* Flèche */
+
+  /* Contrôles */
+  --hauteur-bouton-m: 40px;                                 /* Button M — porté à --zone-tactile [POC, AA] */
+  --hauteur-bouton-l: 52px;                                 /* Button L */
+  --case: 18px;                                             /* Case à cocher, radio d'Option */
+  --radio-coche: 6px;                                       /* anneau du radio sélectionné */
+  --taille-largeur: 56px;                                   /* Taille : 56 × 44 */
+  --quantite-bouton: 40px;                                  /* Quantité — porté à --zone-tactile [POC, AA] */
+  --pastille-etape: 24px;                                   /* Étape du tunnel */
+  --point: 32px;                                            /* Point (look) */
+
+  /* En-tête et pied de page — mode Mobile */
+  --entete-hauteur: 64px;                                   /* En-tête Mobile */
+  --entete-marge: 8px;                                      /* En-tête Mobile, padding horizontal */
+  --logo-entete: 86px;                                      /* Logo, en-tête Mobile (86 × 36) */
+  --logo-pied: 345px;                                       /* Logo, pied Mobile (345 × 145) */
+  --pied-marge: 24px;                                       /* Pied Mobile, padding horizontal */
+  --pied-marge-verticale: 48px;                             /* Pied Mobile, padding vertical */
+
+  /* Superposition */
+  --plan-entete: 10;
+  --plan-volet: 20;
+
+  /* ------------------------------------------------------------------------
+     6. Animations [POC] — discrètes, absentes de Figma
+     ------------------------------------------------------------------------ */
+  --duree-courte: 150ms;
+  --duree: 250ms;
+  --courbe: ease-out;
 }
 
 @media (min-width: 1024px) {
   :root {
-    /* Mode Desktop — à remplir au prompt 01 */
+    /* Titres — mode Desktop */
+    --titre-xl: 48px;  --titre-xl-interligne: 56px;
+    --titre-l: 36px;   --titre-l-interligne: 44px;
+    --titre-m: 28px;   --titre-m-interligne: 36px;
+    --titre-s: 20px;   --titre-s-interligne: 28px;
+
+    /* Mise en page — mode Desktop */
+    --marge: 96px;
+    --gouttiere: 32px;
+    --section: 128px;
+
+    /* En-tête et pied de page — mode Desktop */
+    --entete-hauteur: 80px;
+    --entete-marge: 32px;
+    --logo-entete: 119px;                                   /* 119 × 50 */
+    --logo-pied: 720px;                                     /* 720 × 302 */
+    --pied-marge: 96px;
+    --pied-marge-verticale: 64px;
+  }
+}
+
+/* Réduction des animations demandée par le système */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duree-courte: 0ms;
+    --duree: 0ms;
   }
 }

@@ -1,8 +1,26 @@
 /* ==========================================================================
    NAME. — Styles
-   Uniquement des variables de tokens.css (aucune valeur en dur).
-   Base minimale du prompt 00 : le style des composants arrive au prompt 01.
+   Uniquement des variables de tokens.css : aucune couleur ni taille en dur.
+   Seule exception technique : le seuil des media queries (1024px), qui ne
+   peut pas être une variable CSS. Il correspond au passage Mobile → Desktop
+   des variables Figma.
+
+   Sommaire
+   1. Base
+   2. Utilitaires
+   3. Icônes
+   4. Atomes : bouton, lien, mention, flèche, visuel, séparateur
+   5. Formulaires : champ, option, case, taille, quantité
+   6. Navigation : onglets, accordéon, point, étape, lien de navigation
+   7. Délai de fabrication
+   8. En-tête, menu mobile, pied de page
+
+   États Figma → CSS : Survol = :hover, Pressé = :active,
+   Désactivé = [disabled] / [aria-disabled="true"], Erreur = [aria-invalid="true"].
+   Les classes .est-survol / .est-presse / .est-focus ne servent qu'au styleguide.
    ========================================================================== */
+
+/* 1. Base ================================================================= */
 
 *,
 *::before,
@@ -10,8 +28,36 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
+  background: var(--couleur-fond-page);
+  color: var(--couleur-texte-principal);
+  font-family: var(--police-texte);
+  font-weight: var(--graisse-regular);
+  font-size: var(--texte-l);
+  line-height: var(--texte-l-interligne);
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  font-family: var(--police-titre);
+  font-weight: var(--graisse-regular);
+  color: var(--couleur-texte-fort);
+}
+
+p, ul, ol, figure {
+  margin: 0;
+}
+
+ul[role="list"],
+ul.liste-nue {
+  list-style: none;
+  padding: 0;
 }
 
 img {
@@ -20,19 +66,40 @@ img {
   display: block;
 }
 
-/* Lien d'évitement : visible seulement au focus clavier */
-.lien-evitement {
-  position: absolute;
-  left: 0;
-  top: 0;
-  transform: translateY(-100%);
+a {
+  color: inherit;
 }
 
-.lien-evitement:focus {
-  transform: none;
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
 }
 
-/* Contenu réservé aux lecteurs d'écran */
+/* Focus visible [POC] — clavier uniquement */
+:focus-visible {
+  outline: var(--focus-epaisseur) solid var(--couleur-focus);
+  outline-offset: var(--focus-decalage);
+}
+
+.sur-fond-sombre :focus-visible {
+  outline-color: var(--couleur-focus-inverse);
+}
+
+/* Styles de texte Figma */
+.titre-xl { font-family: var(--police-titre); font-size: var(--titre-xl); line-height: var(--titre-xl-interligne); }
+.titre-l  { font-family: var(--police-titre); font-size: var(--titre-l);  line-height: var(--titre-l-interligne); }
+.titre-m  { font-family: var(--police-titre); font-size: var(--titre-m);  line-height: var(--titre-m-interligne); }
+.titre-s  { font-family: var(--police-titre); font-size: var(--titre-s);  line-height: var(--titre-s-interligne); }
+.texte-l  { font-size: var(--texte-l); line-height: var(--texte-l-interligne); }
+.texte-m  { font-size: var(--texte-m); line-height: var(--texte-m-interligne); }
+.texte-s  { font-size: var(--texte-s); line-height: var(--texte-s-interligne); }
+.texte-secondaire { color: var(--couleur-texte-secondaire); }
+
+/* 2. Utilitaires ========================================================== */
+
 .visuellement-cache {
   position: absolute;
   width: 1px;
@@ -43,7 +110,1093 @@ img {
   white-space: nowrap;
 }
 
+/* Lien d'évitement : visible seulement au focus clavier */
+.lien-evitement {
+  position: absolute;
+  z-index: var(--plan-volet);
+  left: var(--espace-2);
+  top: var(--espace-2);
+  padding: var(--espace-2) var(--espace-4);
+  background: var(--couleur-fond-inverse);
+  color: var(--couleur-texte-inverse);
+}
+
+.lien-evitement:not(:focus) {
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* Information manquante dans toutes les sources : doit rester visible */
 .a-definir {
-  outline: 2px dashed currentColor;
+  outline: var(--focus-epaisseur) dashed currentColor;
+  outline-offset: var(--focus-decalage);
+}
+
+/* 3. Icônes ===============================================================
+   Les SVG Figma (assets/icones/) servent de masque : la couleur suit
+   currentColor, sans modifier les fichiers. */
+
+.icone {
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--icone, var(--icone-20));
+  height: var(--icone, var(--icone-20));
+  background-color: currentColor;
+  -webkit-mask: var(--icone-fichier) center / contain no-repeat;
+  mask: var(--icone-fichier) center / contain no-repeat;
+}
+
+.icone--alerte         { --icone-fichier: url("../../assets/icones/alerte.svg"); }
+.icone--chevron        { --icone-fichier: url("../../assets/icones/chevron.svg"); }
+.icone--ciseaux        { --icone-fichier: url("../../assets/icones/ciseaux.svg"); }
+.icone--coche          { --icone-fichier: url("../../assets/icones/coche.svg"); }
+.icone--fermer         { --icone-fichier: url("../../assets/icones/fermer.svg"); }
+.icone--fleche-16      { --icone-fichier: url("../../assets/icones/fleche-bouton-16.svg"); }
+.icone--fleche-20      { --icone-fichier: url("../../assets/icones/fleche-bouton-20.svg"); }
+.icone--fleche-gauche  { --icone-fichier: url("../../assets/icones/fleche-gauche.svg"); }
+.icone--fleche-droite  { --icone-fichier: url("../../assets/icones/fleche-droite.svg"); }
+.icone--menu           { --icone-fichier: url("../../assets/icones/menu.svg"); }
+.icone--moins          { --icone-fichier: url("../../assets/icones/moins.svg"); }
+.icone--moins-16       { --icone-fichier: url("../../assets/icones/moins-16.svg"); }
+.icone--plus           { --icone-fichier: url("../../assets/icones/plus.svg"); }
+.icone--plus-16        { --icone-fichier: url("../../assets/icones/plus-16.svg"); }
+.icone--recherche      { --icone-fichier: url("../../assets/icones/recherche.svg"); }
+.icone--sac            { --icone-fichier: url("../../assets/icones/sac.svg"); }
+
+/* 4. Atomes =============================================================== */
+
+/* Button (82:255) — Principal / Secondaire / Texte × M / L */
+.bouton {
+  --icone: var(--icone-16);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espace-2);
+  /* M = 40 px dans Figma, porté à 44 px (zone tactile) [POC, AA] */
+  min-height: max(var(--hauteur-bouton-m), var(--zone-tactile));
+  padding: 0 var(--espace-4);
+  border: var(--trait) solid transparent;
+  border-radius: var(--rayon);
+  background: var(--couleur-action-principal);
+  color: var(--couleur-texte-inverse);
+  font-family: var(--police-titre);
+  font-size: var(--bouton-m);
+  line-height: var(--bouton-m-interligne);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--duree-courte) var(--courbe),
+              color var(--duree-courte) var(--courbe),
+              border-color var(--duree-courte) var(--courbe);
+}
+
+.bouton--l {
+  --icone: var(--icone-20);
+  min-height: var(--hauteur-bouton-l);
+  padding: 0 var(--espace-6);
+  font-size: var(--bouton-l);
+  line-height: var(--bouton-l-interligne);
+}
+
+.bouton--pleine-largeur {
+  display: flex;
+  width: 100%;
+}
+
+/* Principal */
+.bouton:hover,
+.bouton.est-survol {
+  background: var(--couleur-action-principal-survol);
+}
+
+.bouton:active,
+.bouton.est-presse {
+  background: var(--couleur-action-principal-presse);
+}
+
+/* Secondaire : contour ; au survol devient plein ; pressé = fond image */
+.bouton--secondaire {
+  background: transparent;
+  border-color: var(--couleur-bordure-forte);
+  color: var(--couleur-texte-fort);
+}
+
+.bouton--secondaire:hover,
+.bouton--secondaire.est-survol {
+  background: var(--couleur-action-principal);
+  color: var(--couleur-texte-inverse);
+}
+
+.bouton--secondaire:active,
+.bouton--secondaire.est-presse {
+  background: var(--couleur-fond-image);
+  color: var(--couleur-texte-fort);
+}
+
+/* Texte : sans fond ni marge interne ; pressé = texte principal */
+.bouton--texte,
+.bouton--texte:hover,
+.bouton--texte.est-survol {
+  padding: 0;
+  background: transparent;
+  color: var(--couleur-texte-fort);
+}
+
+.bouton--texte:active,
+.bouton--texte.est-presse {
+  background: transparent;
+  color: var(--couleur-texte-principal);
+}
+
+/* Désactivé (les trois types) */
+.bouton:disabled,
+.bouton[aria-disabled="true"] {
+  background: var(--couleur-action-desactive);
+  border-color: transparent;
+  color: var(--couleur-texte-inverse);
+  cursor: not-allowed;
+}
+
+.bouton--secondaire:disabled,
+.bouton--secondaire[aria-disabled="true"] {
+  background: transparent;
+  border-color: var(--couleur-bordure-defaut);
+  color: var(--couleur-texte-desactive);
+}
+
+.bouton--texte:disabled,
+.bouton--texte[aria-disabled="true"] {
+  background: transparent;
+  color: var(--couleur-texte-desactive);
+}
+
+/* Lien (82:260) — texte M ; survol plus foncé + soulignement [POC, AA : pas la couleur seule] */
+.lien {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--zone-tactile);
+  color: var(--couleur-texte-principal);
+  font-size: var(--texte-m);
+  line-height: var(--texte-m-interligne);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: var(--espace-1);
+  transition: color var(--duree-courte) var(--courbe),
+              text-decoration-color var(--duree-courte) var(--courbe);
+}
+
+.lien:hover,
+.lien.est-survol {
+  color: var(--couleur-texte-fort);
+  text-decoration-color: currentColor;
+}
+
+/* Dans un paragraphe, un lien reste souligné */
+p .lien {
+  min-height: 0;
+  display: inline;
+  text-decoration-color: currentColor;
+}
+
+/* Mention (82:267) — Contour / Plein / Texte. Remplace les tags colorés. */
+.mention {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--espace-1) var(--espace-2);
+  border: var(--trait) solid var(--couleur-bordure-forte);
+  color: var(--couleur-texte-fort);
+  font-family: var(--police-titre);
+  font-size: var(--bouton-s);
+  line-height: var(--bouton-s-interligne);
+  white-space: nowrap;
+}
+
+.mention--plein {
+  background: var(--couleur-fond-inverse);
+  border-color: var(--couleur-fond-inverse);
+  color: var(--couleur-texte-inverse);
+}
+
+.mention--texte {
+  padding-left: 0;
+  padding-right: 0;
+  border-color: transparent;
+}
+
+/* Flèche (162:6861) — icône 24 dans une zone tactile 44 */
+.fleche {
+  --icone: var(--icone-24);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--zone-tactile);
+  height: var(--zone-tactile);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--couleur-texte-principal);
+  cursor: pointer;
+}
+
+.fleche:hover {
+  color: var(--couleur-texte-fort);
+}
+
+.fleche:disabled {
+  color: var(--couleur-texte-desactive);
+  cursor: default;
+}
+
+/* Visuel (82:268) — bloc gris avec texte descriptif.
+   Le calque « Packshot dos » visible au survol n'est pas repris :
+   CLAUDE.md interdit de changer l'image au survol. */
+.visuel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espace-1);
+  padding: var(--espace-4);
+  overflow: hidden;
+  aspect-ratio: var(--visuel-ratio, 4 / 5);       /* 320 × 400 dans le UI kit */
+  background: var(--couleur-fond-image);
+  /* Figma : texte/secondaire = 4,1:1 sur fond/image, sous le seuil AA.
+     texte/principal = 8,1:1 [POC, AA] */
+  color: var(--couleur-texte-principal);
+  font-size: var(--texte-s);
+  line-height: var(--texte-s-interligne);
+  text-align: center;
+}
+
+.visuel__packshot {
+  flex: 1 0 0;
+  width: 100%;
+  background: var(--couleur-fond-image-survol);
+}
+
+/* Séparateur (82:270) */
+.separateur {
+  width: 100%;
+  height: 0;
+  margin: 0;
+  border: 0;
+  border-top: var(--trait) solid var(--couleur-bordure-defaut);
+}
+
+/* 5. Formulaires ========================================================== */
+
+/* Champ (83:209) — Texte / Liste × Défaut / Focus / Rempli / Erreur / Désactivé */
+.champ {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-2);
+  width: 100%;
+}
+
+.champ__libelle {
+  color: var(--couleur-texte-principal);
+  font-size: var(--texte-s);
+  line-height: var(--texte-s-interligne);
+}
+
+.champ__zone {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.champ__saisie {
+  width: 100%;
+  height: var(--hauteur-champ);
+  padding: 0 var(--espace-4);
+  border: var(--trait) solid var(--couleur-bordure-champ);   /* [POC, AA] Figma : bordure/defaut */
+  border-radius: var(--rayon);
+  background: var(--couleur-fond-surface);
+  color: var(--couleur-texte-fort);
+  font-size: var(--texte-l);
+  line-height: var(--texte-l-interligne);
+  appearance: none;
+}
+
+.champ__saisie::placeholder {
+  color: var(--couleur-texte-secondaire);
+  opacity: 1;
+}
+
+/* Focus : contour 1,5 px fort (Figma), sans décaler la mise en page */
+.champ__saisie:focus,
+.champ__saisie.est-focus {
+  outline: none;
+  border-color: var(--couleur-bordure-forte);
+  box-shadow: inset 0 0 0 calc(var(--trait-fort) - var(--trait)) var(--couleur-bordure-forte);
+}
+
+.champ__saisie:focus-visible {
+  outline: var(--focus-epaisseur) solid var(--couleur-focus);
+  outline-offset: var(--focus-decalage);
+}
+
+/* Liste : chevron à droite */
+select.champ__saisie {
+  padding-right: calc(var(--espace-4) * 2 + var(--icone-20));
+  cursor: pointer;
+}
+
+select.champ__saisie:invalid,
+select.champ__saisie.est-vide {
+  color: var(--couleur-texte-secondaire);
+}
+
+.champ__chevron {
+  --icone: var(--icone-20);
+  position: absolute;
+  right: var(--espace-4);
+  pointer-events: none;
+  color: var(--couleur-icone-principal);
+}
+
+/* Erreur : bordure + icône + message, jamais la couleur seule */
+.champ__saisie[aria-invalid="true"] {
+  border-color: var(--couleur-bordure-erreur);
+}
+
+.champ__saisie[aria-invalid="true"]:focus {
+  box-shadow: inset 0 0 0 calc(var(--trait-fort) - var(--trait)) var(--couleur-bordure-erreur);
+}
+
+.champ__message {
+  display: flex;
+  align-items: center;
+  gap: var(--espace-1);
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--texte-s);
+  line-height: var(--texte-s-interligne);
+}
+
+.champ__message--erreur {
+  --icone: var(--icone-14);
+  color: var(--couleur-texte-erreur);
+}
+
+/* Désactivé */
+.champ--desactive .champ__libelle,
+.champ__saisie:disabled,
+.champ__saisie:disabled::placeholder {
+  color: var(--couleur-texte-desactive);
+}
+
+.champ__saisie:disabled {
+  border-color: var(--couleur-bordure-defaut);
+  cursor: not-allowed;
+}
+
+.champ--desactive .champ__chevron {
+  color: var(--couleur-texte-desactive);
+}
+
+/* Option (83:223) — choix exclusif (livraison, paiement) */
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espace-3);
+  padding: var(--espace-4);
+  border: var(--trait) solid var(--couleur-bordure-champ);   /* [POC, AA] */
+  background: var(--couleur-fond-surface);
+  cursor: pointer;
+}
+
+.option:has(input:checked) {
+  border-color: var(--couleur-bordure-forte);
+  box-shadow: inset 0 0 0 calc(var(--trait-fort) - var(--trait)) var(--couleur-bordure-forte);
+}
+
+.option:has(input:focus-visible) {
+  outline: var(--focus-epaisseur) solid var(--couleur-focus);
+  outline-offset: var(--focus-decalage);
+}
+
+.option__contenu {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  gap: var(--espace-1);
+  min-width: 0;
+}
+
+.option__titre,
+.option__valeur {
+  color: var(--couleur-texte-fort);
+  font-size: var(--texte-l);
+  line-height: var(--texte-l-interligne);
+}
+
+.option__description {
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--texte-s);
+  line-height: var(--texte-s-interligne);
+}
+
+/* Radio de l'option : cercle 18, sélectionné = anneau de 6 */
+.radio {
+  flex-shrink: 0;
+  width: var(--case);
+  height: var(--case);
+  margin: calc((var(--texte-l-interligne) - var(--case)) / 2) 0 0;
+  border: var(--trait) solid var(--couleur-bordure-forte);
+  border-radius: var(--rayon-rond);
+  appearance: none;
+  cursor: pointer;
+}
+
+.radio:checked {
+  border-width: var(--radio-coche);
+}
+
+.radio:focus-visible {
+  outline: none;   /* le focus est porté par .option */
+}
+
+/* Case à cocher (83:233) — libellé cliquable, zone tactile 44 */
+.case {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espace-3);
+  min-height: var(--zone-tactile);
+  color: var(--couleur-texte-principal);
+  font-size: var(--texte-m);
+  line-height: var(--texte-m-interligne);
+  cursor: pointer;
+}
+
+.case__entree {
+  position: relative;
+  flex-shrink: 0;
+  width: var(--case);
+  height: var(--case);
+  margin: 0;
+  border: var(--trait) solid var(--couleur-bordure-forte);
+  border-radius: var(--rayon);
+  background: transparent;
+  appearance: none;
+  cursor: pointer;
+}
+
+.case__entree:checked {
+  background: var(--couleur-action-principal);
+}
+
+.case__entree:checked::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: var(--icone-14);
+  height: var(--icone-14);
+  background-color: var(--couleur-icone-inverse);
+  -webkit-mask: url("../../assets/icones/coche.svg") center / contain no-repeat;
+  mask: url("../../assets/icones/coche.svg") center / contain no-repeat;
+}
+
+/* Taille (83:245) — Défaut / Survol / Sélectionnée / Indisponible / Erreur.
+   Structure : <label class="taille"><input type="radio" class="visuellement-cache"><span>M</span></label> */
+.tailles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espace-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.taille {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--taille-largeur);
+  height: var(--zone-tactile);
+  border: var(--trait) solid var(--couleur-bordure-champ);   /* [POC, AA] */
+  color: var(--couleur-texte-fort);
+  font-size: var(--texte-m);
+  line-height: var(--texte-m-interligne);
+  cursor: pointer;
+  transition: border-color var(--duree-courte) var(--courbe),
+              background-color var(--duree-courte) var(--courbe);
+}
+
+.taille:hover,
+.taille.est-survol {
+  border-color: var(--couleur-bordure-forte);
+}
+
+.taille:has(input:checked) {
+  background: var(--couleur-fond-inverse);
+  border-color: var(--couleur-bordure-forte);
+  color: var(--couleur-texte-inverse);
+}
+
+.taille:has(input:focus-visible) {
+  outline: var(--focus-epaisseur) solid var(--couleur-focus);
+  outline-offset: var(--focus-decalage);
+}
+
+/* Indisponible : réservé aux pièces uniques, jamais « rupture » pour Signature */
+.taille:has(input:disabled) {
+  border-color: var(--couleur-bordure-defaut);
+  color: var(--couleur-texte-desactive);
+  cursor: not-allowed;
+}
+
+.tailles[aria-invalid="true"] .taille,
+.taille--erreur {
+  border-color: var(--couleur-bordure-erreur);
+}
+
+/* Quantité (83:269) */
+.quantite {
+  display: inline-flex;
+  align-items: center;
+  border: var(--trait) solid var(--couleur-bordure-champ);   /* [POC, AA] */
+}
+
+.quantite__bouton {
+  --icone: var(--icone-16);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* 40 px dans Figma, portés à 44 px [POC, AA] */
+  width: max(var(--quantite-bouton), var(--zone-tactile));
+  height: max(var(--quantite-bouton), var(--zone-tactile));
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--couleur-icone-principal);
+  cursor: pointer;
+}
+
+.quantite__bouton:disabled {
+  color: var(--couleur-texte-desactive);
+  cursor: not-allowed;
+}
+
+.quantite__valeur {
+  min-width: var(--espace-4);
+  color: var(--couleur-texte-fort);
+  font-size: var(--texte-m);
+  line-height: var(--texte-m-interligne);
+  text-align: center;
+}
+
+/* 6. Navigation =========================================================== */
+
+/* Onglet (83:253) — desktop ; en mobile, la fiche produit utilise l'Accordéon */
+.onglets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espace-8);
+}
+
+.onglet {
+  min-height: var(--zone-tactile);
+  padding: var(--espace-2) 0;
+  border: 0;
+  border-bottom: var(--trait) solid transparent;
+  background: transparent;
+  color: var(--couleur-texte-secondaire);
+  font-family: var(--police-titre);
+  font-size: var(--titre-s);
+  line-height: var(--titre-s-interligne);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.onglet:hover,
+.onglet.est-survol {
+  color: var(--couleur-texte-fort);
+}
+
+.onglet[aria-selected="true"] {
+  border-bottom-color: var(--couleur-bordure-forte);
+  color: var(--couleur-texte-fort);
+}
+
+.onglet-panneau {
+  padding-top: var(--espace-6);
+}
+
+/* Accordéon (83:267) — <details> natif */
+.accordeon {
+  border-top: var(--trait) solid var(--couleur-bordure-defaut);
+}
+
+.accordeon__titre {
+  --icone: var(--icone-20);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espace-4);
+  min-height: var(--zone-tactile);
+  padding: var(--espace-4) 0;
+  color: var(--couleur-texte-fort);
+  font-family: var(--police-titre);
+  font-size: var(--bouton-l);
+  line-height: var(--bouton-l-interligne);
+  list-style: none;
+  cursor: pointer;
+}
+
+.accordeon__titre::-webkit-details-marker {
+  display: none;
+}
+
+.accordeon__titre::after {
+  content: "";
+  width: var(--icone);
+  height: var(--icone);
+  flex-shrink: 0;
+  background-color: var(--couleur-icone-principal);
+  -webkit-mask: url("../../assets/icones/plus.svg") center / contain no-repeat;
+  mask: url("../../assets/icones/plus.svg") center / contain no-repeat;
+}
+
+.accordeon[open] > .accordeon__titre::after {
+  -webkit-mask-image: url("../../assets/icones/moins.svg");
+  mask-image: url("../../assets/icones/moins.svg");
+}
+
+.accordeon__contenu {
+  padding-bottom: var(--espace-4);
+  margin-top: calc(var(--espace-3) - var(--espace-4));
+  color: var(--couleur-texte-principal);
+  font-size: var(--texte-m);
+  line-height: var(--texte-m-interligne);
+}
+
+/* Point (83:283) — sur un visuel de look ; zone tactile 44 autour */
+.point {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--point);
+  height: var(--point);
+  padding: 0;
+  border: var(--trait) solid var(--couleur-bordure-forte);
+  border-radius: var(--rayon-rond);
+  background: var(--couleur-fond-surface);
+  color: var(--couleur-texte-fort);
+  font-size: var(--texte-s);
+  line-height: var(--texte-s-interligne);
+  cursor: pointer;
+}
+
+.point::before {
+  content: "";
+  position: absolute;
+  inset: calc((var(--point) - var(--zone-tactile)) / 2);
+}
+
+.point[aria-expanded="true"],
+.point.est-actif {
+  background: var(--couleur-fond-inverse);
+  color: var(--couleur-texte-inverse);
+}
+
+/* Étape du tunnel (83:298) — Terminée / En cours / À venir */
+.etapes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espace-6);
+  padding: 0;
+  list-style: none;
+}
+
+.etape {
+  --icone: var(--icone-14);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espace-2);
+  color: var(--couleur-texte-fort);
+  font-family: var(--police-titre);
+  font-size: var(--bouton-m);
+  line-height: var(--bouton-m-interligne);
+}
+
+.etape__pastille {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--pastille-etape);
+  height: var(--pastille-etape);
+  border: var(--trait) solid var(--couleur-bordure-forte);
+  border-radius: var(--rayon-rond);
+  background: var(--couleur-fond-inverse);
+  color: var(--couleur-texte-inverse);
+  font-family: var(--police-texte);
+  font-size: var(--texte-s);
+  line-height: var(--texte-s-interligne);
+}
+
+.etape--a-venir {
+  color: var(--couleur-texte-secondaire);
+}
+
+.etape--a-venir .etape__pastille {
+  border-color: var(--couleur-bordure-defaut);
+  background: transparent;
+  color: var(--couleur-texte-secondaire);
+}
+
+/* Lien de navigation (83:306) — Figma : 3 états identiques.
+   Survol et Actif soulignés [POC] pour que l'état se voie. */
+.lien-nav {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--zone-tactile);
+  padding: var(--espace-1) 0;
+  color: var(--couleur-texte-fort);
+  font-family: var(--police-titre);
+  font-size: var(--bouton-m);
+  line-height: var(--bouton-m-interligne);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: var(--espace-1);
+  white-space: nowrap;
+  transition: text-decoration-color var(--duree-courte) var(--courbe);
+}
+
+.lien-nav:hover,
+.lien-nav.est-survol,
+.lien-nav[aria-current="page"] {
+  text-decoration-color: currentColor;
+}
+
+/* 7. Délai de fabrication (85:233) ======================================== */
+
+.delai {
+  --icone: var(--icone-18);
+  display: flex;
+  align-items: center;
+  gap: var(--espace-2);
+  color: var(--couleur-texte-fort);
+  font-size: var(--texte-m);
+  line-height: var(--texte-m-interligne);
+}
+
+/* 8. En-tête, menu mobile, pied de page =================================== */
+
+/* En-tête (85:191) — fixe ; mobile : menu, recherche | logo | panier */
+.en-tete {
+  position: sticky;
+  top: 0;
+  z-index: var(--plan-entete);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: var(--entete-hauteur);
+  padding: 0 var(--entete-marge);
+  background: var(--couleur-fond-page);
+}
+
+.en-tete__gauche,
+.en-tete__actions {
+  display: flex;
+  align-items: center;
+}
+
+.en-tete__actions {
+  justify-content: flex-end;
+  gap: var(--espace-2);
+}
+
+.en-tete__logo {
+  display: flex;
+  align-items: center;
+  width: var(--logo-entete);
+  min-height: var(--zone-tactile);
+}
+
+.en-tete__icone {
+  --icone: var(--icone-22);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--zone-tactile);
+  height: var(--zone-tactile);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--couleur-icone-principal);
+  cursor: pointer;
+}
+
+.en-tete__panier-mobile {
+  display: inline-flex;
+  align-items: center;
+  color: var(--couleur-texte-fort);
+  font-size: var(--texte-s);
+  line-height: var(--texte-s-interligne);
+  text-decoration: none;
+}
+
+.en-tete__panier-mobile .en-tete__icone {
+  width: var(--zone-tactile);
+}
+
+.en-tete__nav,
+.en-tete__panier-desktop,
+.en-tete__recherche-desktop {
+  display: none;
+}
+
+.en-tete__nav ul {
+  display: flex;
+  gap: var(--espace-12);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 1024px) {
+  .en-tete__gauche,
+  .en-tete__panier-mobile {
+    display: none;
+  }
+
+  .en-tete__nav,
+  .en-tete__recherche-desktop {
+    display: inline-flex;
+  }
+
+  .en-tete__panier-desktop {
+    display: inline-flex;
+  }
+
+  /* Desktop : logo | navigation | actions */
+  .en-tete__logo {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .en-tete__nav {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .en-tete__actions {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}
+
+/* Menu mobile (208:952) — <dialog> plein écran : focus piégé et Échap natifs */
+.menu-mobile {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--couleur-fond-page);
+  color: var(--couleur-texte-principal);
+}
+
+.menu-mobile[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-mobile::backdrop {
+  background: var(--couleur-fond-voile);
+}
+
+.menu-mobile__entete {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: var(--entete-hauteur);
+  padding: 0 var(--entete-marge);
+}
+
+.menu-mobile__entete .en-tete__logo {
+  grid-column: 2;
+}
+
+.menu-mobile__nav {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  gap: var(--espace-6);
+  padding: var(--espace-8) var(--marge) var(--espace-6);
+}
+
+.menu-mobile__principal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menu-mobile__entree {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-1);
+  text-decoration: none;
+}
+
+.menu-mobile__entree-titre {
+  color: var(--couleur-texte-fort);
+  font-family: var(--police-titre);
+  font-size: var(--titre-l);
+  line-height: var(--titre-l-interligne);
+}
+
+.menu-mobile__entree-sous-titre {
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--texte-s);
+  line-height: var(--texte-s-interligne);
+}
+
+.menu-mobile__secondaire {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menu-mobile__secondaire a {
+  display: flex;
+  align-items: center;
+  min-height: var(--zone-tactile);
+  color: var(--couleur-texte-principal);
+  font-size: var(--texte-l);
+  line-height: var(--texte-l-interligne);
+  text-decoration: none;
+}
+
+.menu-mobile__bas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-2);
+  padding: 0 var(--marge) var(--espace-8);
+  font-size: var(--texte-m);
+  line-height: var(--texte-m-interligne);
+}
+
+.menu-mobile__bas a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--zone-tactile);
+  text-decoration: none;
+}
+
+@media (min-width: 1024px) {
+  .menu-mobile {
+    display: none;
+  }
+}
+
+/* Pied de page (85:231) — fond sombre, grand logo */
+.pied {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-8);
+  padding: var(--pied-marge-verticale) var(--pied-marge);
+  background: var(--couleur-fond-inverse);
+  color: var(--couleur-texte-inverse);
+}
+
+.pied__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-8);
+}
+
+.pied__groupe {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-1);
+}
+
+.pied__titre {
+  color: var(--couleur-texte-inverse-secondaire);
+  font-size: var(--bouton-s);
+  line-height: var(--bouton-s-interligne);
+}
+
+.pied__groupe ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pied__groupe a,
+.pied__groupe .pied__texte {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--zone-tactile);   /* [POC] 44 px sur mobile */
+  color: var(--couleur-texte-inverse);
+  font-size: var(--texte-m);
+  line-height: var(--texte-m-interligne);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: var(--espace-1);
+}
+
+.pied__groupe a:hover {
+  text-decoration-color: currentColor;
+}
+
+.pied__logo {
+  width: var(--logo-pied);
+  max-width: 100%;
+}
+
+.pied__mentions {
+  color: var(--couleur-texte-inverse-secondaire);
+  font-size: var(--texte-s);
+  line-height: var(--texte-s-interligne);
+}
+
+@media (min-width: 1024px) {
+  .pied {
+    gap: var(--espace-12);
+  }
+
+  .pied__nav {
+    flex-direction: row;
+    gap: var(--espace-24);
+  }
+
+  .pied__groupe {
+    gap: var(--espace-3);
+  }
+
+  /* Desktop : densité de la maquette (souris) */
+  .pied__groupe a,
+  .pied__groupe .pied__texte {
+    min-height: 0;
+  }
+}
+
+/* 9. Page indisponible ==================================================== */
+
+.indisponible {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espace-4);
+  padding: var(--section) var(--marge);
+}
+
+.indisponible h1 {
+  font-size: var(--titre-l);
+  line-height: var(--titre-l-interligne);
 }

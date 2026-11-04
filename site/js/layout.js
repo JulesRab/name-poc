@@ -1,44 +1,131 @@
-// En-tête et pied de page communs, injectés sur chaque page.
+// En-tête, menu mobile et pied de page communs, injectés sur chaque page.
 // Chaque page contient :
 //   <header data-layout="en-tete"></header> … <footer data-layout="pied"></footer>
-// Version fonctionnelle du prompt 00 : la structure, le style et le menu mobile
-// seront alignés sur le UI kit Figma (85:191, 208:952, 85:231) au prompt 01.
+// Sources Figma : En-tête 85:191, Menu mobile 208:952, Pied de page 85:231.
 
 import { nombreArticles } from './session.js';
+import { initialiserMenuMobile } from './menu-mobile.js';
+import { initialiserDelais } from './delai.js';
 
 // Écrans pas encore construits : tout mène à indisponible.html (aucun lien cassé).
-// À rebrancher au fil des flows.
+// À rebrancher au fil des flows (liste tenue dans docs/journal.md).
 const INDISPONIBLE = 'indisponible.html';
 
 const LIENS = {
   accueil: 'index.html',
-  signature: INDISPONIBLE, // signature.html — prompt 02
-  collection: INDISPONIBLE, // collection.html — hors prompts pour l'instant
-  marque: INDISPONIBLE, // pas d'écran prévu
-  recherche: INDISPONIBLE, // calque de recherche — prompt 02
-  panier: INDISPONIBLE, // panier.html — prompt 05
+  signature: INDISPONIBLE,   // signature.html — prompt 02
+  collection: INDISPONIBLE,  // collection.html — pas de prompt pour l'instant
+  marque: INDISPONIBLE,      // pas d'écran prévu
+  recherche: INDISPONIBLE,   // calque de recherche — prompt 02
+  panier: INDISPONIBLE,      // panier.html — prompt 05
   instagram: 'https://www.instagram.com/name.ateliers/',
 };
 
-function enTete() {
+const LOGO_NOIR = '../assets/logo/logo-noir.png';
+
+// Page courante : lien de navigation « Actif »
+function courant(lien) {
+  const page = location.pathname.split('/').pop() || 'index.html';
+  return lien !== INDISPONIBLE && lien === page ? ' aria-current="page"' : '';
+}
+
+function libellePanier(n) {
+  return `Mon panier, ${n} article${n > 1 ? 's' : ''}`;
+}
+
+function logo(classe = 'en-tete__logo') {
+  return `
+    <a class="${classe}" href="${LIENS.accueil}">
+      <img src="${LOGO_NOIR}" alt="NAME. atelier, accueil" width="410" height="173">
+    </a>`;
+}
+
+function enTete(n) {
   return `
     <a class="lien-evitement" href="#contenu">Aller au contenu</a>
-    <a class="en-tete__logo" href="${LIENS.accueil}">
-      <img src="../assets/logo/logo-noir.png" alt="NAME. atelier, retour à l'accueil" width="410" height="173">
-    </a>
+
+    <div class="en-tete__gauche">
+      <button class="en-tete__icone" type="button" data-ouvrir-menu aria-haspopup="dialog" aria-controls="menu-mobile">
+        <span class="icone icone--menu" aria-hidden="true"></span>
+        <span class="visuellement-cache">Menu</span>
+      </button>
+      <a class="en-tete__icone" href="${LIENS.recherche}">
+        <span class="icone icone--recherche" aria-hidden="true"></span>
+        <span class="visuellement-cache">Rechercher</span>
+      </a>
+    </div>
+
+    ${logo()}
+
     <nav class="en-tete__nav" aria-label="Navigation principale">
       <ul>
-        <li><a href="${LIENS.signature}">Signature.</a></li>
-        <li><a href="${LIENS.collection}">Collection.</a></li>
-        <li><a href="${LIENS.marque}">La marque</a></li>
+        <li><a class="lien-nav" href="${LIENS.signature}"${courant(LIENS.signature)}>Signature</a></li>
+        <li><a class="lien-nav" href="${LIENS.collection}"${courant(LIENS.collection)}>Collection</a></li>
+        <li><a class="lien-nav" href="${LIENS.marque}">La marque</a></li>
       </ul>
     </nav>
+
     <div class="en-tete__actions">
-      <a class="en-tete__recherche" href="${LIENS.recherche}">Rechercher</a>
-      <a class="en-tete__panier" href="${LIENS.panier}">
-        Mon panier (<span data-compteur-panier>${nombreArticles()}</span>)
+      <a class="en-tete__icone en-tete__recherche-desktop" href="${LIENS.recherche}">
+        <span class="icone icone--recherche" aria-hidden="true"></span>
+        <span class="visuellement-cache">Rechercher</span>
+      </a>
+      <a class="bouton en-tete__panier-desktop" href="${LIENS.panier}">Mon panier (<span data-compteur-panier>${n}</span>)</a>
+      <a class="en-tete__panier-mobile" href="${LIENS.panier}" aria-label="${libellePanier(n)}" data-libelle-panier>
+        <span class="en-tete__icone" aria-hidden="true"><span class="icone icone--sac"></span></span>
+        <span aria-hidden="true">(<span data-compteur-panier>${n}</span>)</span>
       </a>
     </div>`;
+}
+
+function menuMobile(n) {
+  return `
+    <dialog class="menu-mobile" id="menu-mobile" aria-label="Menu">
+      <div class="menu-mobile__entete">
+        <button class="en-tete__icone" type="button" data-fermer-menu>
+          <span class="icone icone--fermer" aria-hidden="true"></span>
+          <span class="visuellement-cache">Fermer le menu</span>
+        </button>
+        ${logo()}
+      </div>
+
+      <nav class="menu-mobile__nav" aria-label="Menu">
+        <ul class="menu-mobile__principal">
+          <li>
+            <a class="menu-mobile__entree" href="${LIENS.signature}">
+              <span class="menu-mobile__entree-titre">Signature.</span>
+              <span class="menu-mobile__entree-sous-titre">Les pièces fabriquées à la commande</span>
+            </a>
+          </li>
+          <li>
+            <a class="menu-mobile__entree" href="${LIENS.collection}">
+              <span class="menu-mobile__entree-titre">Collection.</span>
+              <span class="menu-mobile__entree-sous-titre">Outlaws. — les looks en pièces uniques</span>
+            </a>
+          </li>
+          <li>
+            <a class="menu-mobile__entree" href="${LIENS.marque}">
+              <span class="menu-mobile__entree-titre">La marque</span>
+              <span class="menu-mobile__entree-sous-titre">L’atelier, les matières, la démarche</span>
+            </a>
+          </li>
+        </ul>
+
+        <hr class="separateur">
+
+        <ul class="menu-mobile__secondaire">
+          <li><a href="${LIENS.recherche}">Rechercher</a></li>
+          <li><a href="${LIENS.panier}">Mon panier (<span data-compteur-panier>${n}</span>)</a></li>
+          <li><a href="${INDISPONIBLE}">Livraison et retours</a></li>
+          <li><a href="${INDISPONIBLE}">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="menu-mobile__bas">
+        <a href="${LIENS.instagram}" target="_blank" rel="noopener">Instagram · @name.ateliers<span class="visuellement-cache"> (nouvel onglet)</span></a>
+        <p>contact@name-atelier.com</p>
+      </div>
+    </dialog>`;
 }
 
 function pied() {
@@ -56,7 +143,8 @@ function pied() {
       <div class="pied__groupe">
         <h2 class="pied__titre">Suivre Name.</h2>
         <ul>
-          <li><a href="${LIENS.instagram}" target="_blank" rel="noopener">Instagram<span class="visuellement-cache"> (nouvel onglet)</span></a></li>
+          <li><a href="${LIENS.instagram}" target="_blank" rel="noopener">Instagram · @name.ateliers<span class="visuellement-cache"> (nouvel onglet)</span></a></li>
+          <li><span class="pied__texte">contact@name-atelier.com</span></li>
         </ul>
       </div>
       <div class="pied__groupe">
@@ -68,26 +156,37 @@ function pied() {
         </ul>
       </div>
     </nav>
-    <img class="pied__logo" src="../assets/logo/logo-noir.png" alt="NAME. atelier" width="410" height="173" loading="lazy">`;
+    <img class="pied__logo" src="../assets/logo/logo-blanc.png"
+         srcset="../assets/logo/logo-blanc.png 410w, ../assets/logo/logo-blanc-hd.png 1637w"
+         sizes="(min-width: 1024px) 720px, 345px"
+         alt="NAME. atelier" width="410" height="173" loading="lazy">
+    <p class="pied__mentions">© 2026 Name. atelier</p>`;
 }
 
 export function majCompteurPanier() {
-  document.querySelectorAll('[data-compteur-panier]').forEach((el) => {
-    el.textContent = nombreArticles();
-  });
+  const n = nombreArticles();
+  document.querySelectorAll('[data-compteur-panier]').forEach((el) => { el.textContent = n; });
+  document.querySelectorAll('[data-libelle-panier]').forEach((el) => { el.setAttribute('aria-label', libellePanier(n)); });
 }
 
 function monter() {
+  const n = nombreArticles();
   const zoneEnTete = document.querySelector('[data-layout="en-tete"]');
   const zonePied = document.querySelector('[data-layout="pied"]');
+
   if (zoneEnTete) {
     zoneEnTete.classList.add('en-tete');
-    zoneEnTete.innerHTML = enTete();
+    zoneEnTete.innerHTML = enTete(n);
+    zoneEnTete.insertAdjacentHTML('afterend', menuMobile(n));
+    initialiserMenuMobile();
   }
+
   if (zonePied) {
-    zonePied.classList.add('pied');
+    zonePied.classList.add('pied', 'sur-fond-sombre');
     zonePied.innerHTML = pied();
   }
+
+  initialiserDelais();
 }
 
 monter();

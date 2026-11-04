@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Styleguide — NAME. (POC)</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/png" href="../assets/logo/picto-n-noir.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Playfair+Display+SC&display=swap">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="module" src="js/layout.js"></script>
+  <style>
+    /* Mise en page propre au styleguide (outil interne, non testé) */
+    .sg { padding: var(--section) var(--marge); display: grid; gap: var(--section); }
+    .sg section { display: grid; gap: var(--espace-6); }
+    .sg h2 { font-size: var(--titre-l); line-height: var(--titre-l-interligne); }
+    .sg h3 { font-size: var(--titre-s); line-height: var(--titre-s-interligne); }
+    .sg-note { color: var(--couleur-texte-secondaire); font-size: var(--texte-s); line-height: var(--texte-s-interligne); }
+    .sg-rangee { display: flex; flex-wrap: wrap; gap: var(--espace-6); align-items: flex-start; }
+    .sg-etat { display: grid; gap: var(--espace-2); justify-items: start; }
+    .sg-etat > small { color: var(--couleur-texte-secondaire); font-size: var(--texte-s); }
+    .sg-grille { display: grid; gap: var(--espace-6); grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); }
+    .sg-pastille { display: grid; gap: var(--espace-1); font-size: var(--texte-s); line-height: var(--texte-s-interligne); }
+    .sg-pastille i { display: block; height: var(--espace-16); border: var(--trait) solid var(--couleur-bordure-defaut); }
+    .sg-pastille code { color: var(--couleur-texte-secondaire); }
+    .sg-espace { display: flex; align-items: center; gap: var(--espace-4); font-size: var(--texte-s); }
+    .sg-espace i { display: block; height: var(--espace-4); background: var(--couleur-fond-inverse); }
+    .sg-sombre { padding: var(--espace-6); background: var(--couleur-fond-inverse); }
+    .sg-look { position: relative; width: min(100%, 20rem); }
+    .sg-look .point { position: absolute; }
+  </style>
+</head>
+<body>
+  <header data-layout="en-tete"></header>
+
+  <main id="contenu" class="sg">
+    <div>
+      <h1 class="titre-xl">Styleguide NAME.</h1>
+      <p class="sg-note">Outil interne de vérification du design system (prompt 01). Sources : variables et UI kit Figma. Non destiné aux testeurs.</p>
+    </div>
+
+    <!-- ===================== Jetons ===================== -->
+    <section aria-labelledby="t-couleurs">
+      <h2 id="t-couleurs">Couleurs</h2>
+      <div class="sg-grille" data-pastilles="
+        couleur-fond-page couleur-fond-surface couleur-fond-inverse couleur-fond-image couleur-fond-image-survol couleur-fond-voile
+        couleur-texte-principal couleur-texte-fort couleur-texte-secondaire couleur-texte-desactive couleur-texte-inverse couleur-texte-inverse-secondaire couleur-texte-erreur
+        couleur-bordure-defaut couleur-bordure-forte couleur-bordure-erreur couleur-bordure-champ
+        couleur-action-principal couleur-action-principal-survol couleur-action-principal-presse couleur-action-desactive
+        couleur-icone-principal couleur-icone-inverse couleur-icone-erreur"></div>
+    </section>
+
+    <section aria-labelledby="t-typo">
+      <h2 id="t-typo">Typographie</h2>
+      <p class="sg-note">Tailles Mobile par défaut, Desktop à partir de 1024 px. Largeur actuelle : <span data-largeur></span>.</p>
+      <p class="titre-xl">Titre XL — Signature.</p>
+      <p class="titre-l">Titre L — Chapitre I</p>
+      <p class="titre-m">Titre M — Outlaws.</p>
+      <p class="titre-s">Titre S — Vision produit</p>
+      <p class="texte-l">Texte L — Name. est un label de création textile qui construit ses récits à travers le vêtement.</p>
+      <p class="texte-m">Texte M — Matières naturelles, issues de deadstocks.</p>
+      <p class="texte-s">Texte S — Pièce posée à plat, en centimètres.</p>
+    </section>
+
+    <section aria-labelledby="t-espaces">
+      <h2 id="t-espaces">Espacements</h2>
+      <div data-espaces="espace-1 espace-2 espace-3 espace-4 espace-6 espace-8 espace-12 espace-16 espace-24 espace-32 marge gouttiere section hauteur-champ zone-tactile"></div>
+    </section>
+
+    <!-- ===================== Atomes ===================== -->
+    <section aria-labelledby="c-bouton">
+      <h2 id="c-bouton">Button <span class="sg-note">82:255</span></h2>
+      <div data-boutons></div>
+      <p class="sg-note">Écart : le bouton M fait 44 px de haut (40 dans Figma) pour la zone tactile.</p>
+    </section>
+
+    <section aria-labelledby="c-lien">
+      <h2 id="c-lien">Lien et lien de navigation <span class="sg-note">82:260 · 83:306</span></h2>
+      <div class="sg-rangee">
+        <div class="sg-etat"><small>Lien · Défaut</small><a class="lien" href="#">Conditions de retour</a></div>
+        <div class="sg-etat"><small>Lien · Survol</small><a class="lien est-survol" href="#">Conditions de retour</a></div>
+        <div class="sg-etat"><small>Nav · Défaut</small><a class="lien-nav" href="#">Signature</a></div>
+        <div class="sg-etat"><small>Nav · Survol</small><a class="lien-nav est-survol" href="#">Signature</a></div>
+        <div class="sg-etat"><small>Nav · Actif</small><a class="lien-nav" href="#" aria-current="page">Signature</a></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="c-mention">
+      <h2 id="c-mention">Mention <span class="sg-note">82:267</span></h2>
+      <div class="sg-rangee">
+        <span class="mention">Pièce unique · 1 exemplaire</span>
+        <span class="mention mention--plein">Pièce unique · 1 exemplaire</span>
+        <span class="mention mention--texte">Pièce unique · 1 exemplaire</span>
+      </div>
+    </section>
+
+    <section aria-labelledby="c-fleche">
+      <h2 id="c-fleche">Flèche, Visuel, Séparateur <span class="sg-note">162:6861 · 82:268 · 82:270</span></h2>
+      <div class="sg-rangee">
+        <button class="fleche" type="button"><span class="icone icone--fleche-gauche" aria-hidden="true"></span><span class="visuellement-cache">Photo précédente</span></button>
+        <button class="fleche" type="button"><span class="icone icone--fleche-droite" aria-hidden="true"></span><span class="visuellement-cache">Photo suivante</span></button>
+        <button class="fleche" type="button" disabled><span class="icone icone--fleche-droite" aria-hidden="true"></span><span class="visuellement-cache">Photo suivante (désactivé)</span></button>
+      </div>
+      <div class="sg-rangee">
+        <div class="visuel" style="width: min(100%, 20rem)" role="img" aria-label="Visuel à produire : packshot face, fond neutre">Packshot face — fond neutre</div>
+        <div class="visuel" style="width: min(100%, 20rem)" role="img" aria-label="Visuel à produire : détouré">Packshot détouré<span class="visuel__packshot"></span></div>
+      </div>
+      <hr class="separateur">
+    </section>
+
+    <!-- ===================== Formulaires ===================== -->
+    <section aria-labelledby="c-champ">
+      <h2 id="c-champ">Champ <span class="sg-note">83:209</span></h2>
+      <div class="sg-grille">
+        <div class="champ"><label class="champ__libelle" for="sg-c1">E-mail · Défaut</label><div class="champ__zone"><input class="champ__saisie" id="sg-c1" type="email" placeholder="vous@exemple.fr"></div></div>
+        <div class="champ"><label class="champ__libelle" for="sg-c2">E-mail · Focus</label><div class="champ__zone"><input class="champ__saisie est-focus" id="sg-c2" type="email" placeholder="vous@exemple.fr"></div></div>
+        <div class="champ"><label class="champ__libelle" for="sg-c3">E-mail · Rempli</label><div class="champ__zone"><input class="champ__saisie" id="sg-c3" type="email" value="camille@exemple.fr" aria-describedby="sg-c3-m"></div><p class="champ__message" id="sg-c3-m">Pour vous envoyer la confirmation de commande.</p></div>
+        <div class="champ"><label class="champ__libelle" for="sg-c4">E-mail · Erreur</label><div class="champ__zone"><input class="champ__saisie" id="sg-c4" type="email" value="camille@exemple" aria-invalid="true" aria-describedby="sg-c4-m"></div><p class="champ__message champ__message--erreur" id="sg-c4-m"><span class="icone icone--alerte" aria-hidden="true"></span>Saisissez une adresse e-mail valide.</p></div>
+        <div class="champ champ--desactive"><label class="champ__libelle" for="sg-c5">E-mail · Désactivé</label><div class="champ__zone"><input class="champ__saisie" id="sg-c5" type="email" placeholder="vous@exemple.fr" disabled></div></div>
+      </div>
+      <div class="sg-grille">
+        <div class="champ"><label class="champ__libelle" for="sg-l1">Pays · Défaut</label><div class="champ__zone"><select class="champ__saisie" id="sg-l1" required><option value="" selected disabled>Sélectionnez</option><option>France</option></select><span class="icone icone--chevron champ__chevron" aria-hidden="true"></span></div></div>
+        <div class="champ"><label class="champ__libelle" for="sg-l2">Pays · Rempli</label><div class="champ__zone"><select class="champ__saisie" id="sg-l2"><option>France</option></select><span class="icone icone--chevron champ__chevron" aria-hidden="true"></span></div></div>
+        <div class="champ"><label class="champ__libelle" for="sg-l3">Pays · Erreur</label><div class="champ__zone"><select class="champ__saisie" id="sg-l3" required aria-invalid="true" aria-describedby="sg-l3-m"><option value="" selected disabled>Sélectionnez</option><option>France</option></select><span class="icone icone--chevron champ__chevron" aria-hidden="true"></span></div><p class="champ__message champ__message--erreur" id="sg-l3-m"><span class="icone icone--alerte" aria-hidden="true"></span>Sélectionnez un pays de livraison.</p></div>
+        <div class="champ champ--desactive"><label class="champ__libelle" for="sg-l4">Pays · Désactivé</label><div class="champ__zone"><select class="champ__saisie" id="sg-l4" disabled><option>Sélectionnez</option></select><span class="icone icone--chevron champ__chevron" aria-hidden="true"></span></div></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="c-option">
+      <h2 id="c-option">Option et case à cocher <span class="sg-note">83:223 · 83:233</span></h2>
+      <fieldset class="sg-grille" style="border:0;padding:0;margin:0">
+        <legend class="visuellement-cache">Mode de livraison</legend>
+        <label class="option"><input class="radio" type="radio" name="sg-livraison"><span class="option__contenu"><span class="option__titre">Livraison à domicile</span><span class="option__description">Expédiée après fabrication · reçue sous 1 à 2 semaines</span></span><span class="option__valeur">Offerte</span></label>
+        <label class="option"><input class="radio" type="radio" name="sg-livraison" checked><span class="option__contenu"><span class="option__titre">Livraison à domicile</span><span class="option__description">Expédiée après fabrication · reçue sous 1 à 2 semaines</span></span><span class="option__valeur">Offerte</span></label>
+      </fieldset>
+      <div class="sg-rangee">
+        <label class="case"><input class="case__entree" type="checkbox">Moins de 300 €</label>
+        <label class="case"><input class="case__entree" type="checkbox" checked>Moins de 300 €</label>
+      </div>
+    </section>
+
+    <section aria-labelledby="c-taille">
+      <h2 id="c-taille">Taille <span class="sg-note">83:245</span></h2>
+      <div class="sg-rangee">
+        <div class="sg-etat"><small>Défaut</small><label class="taille"><input class="visuellement-cache" type="radio" name="sg-t1">M</label></div>
+        <div class="sg-etat"><small>Survol</small><label class="taille est-survol"><input class="visuellement-cache" type="radio" name="sg-t2">M</label></div>
+        <div class="sg-etat"><small>Sélectionnée</small><label class="taille"><input class="visuellement-cache" type="radio" name="sg-t3" checked>M</label></div>
+        <div class="sg-etat"><small>Indisponible</small><label class="taille"><input class="visuellement-cache" type="radio" name="sg-t4" disabled>M</label></div>
+        <div class="sg-etat"><small>Erreur</small><label class="taille taille--erreur"><input class="visuellement-cache" type="radio" name="sg-t5">M</label></div>
+      </div>
+      <fieldset class="tailles">
+        <legend class="champ__libelle">Taille (sélecteur interactif)</legend>
+        <label class="taille"><input class="visuellement-cache" type="radio" name="sg-taille" value="XS">XS</label>
+        <label class="taille"><input class="visuellement-cache" type="radio" name="sg-taille" value="S">S</label>
+        <label class="taille"><input class="visuellement-cache" type="radio" name="sg-taille" value="M">M</label>
+        <label class="taille"><input class="visuellement-cache" type="radio" name="sg-taille" value="L">L</label>
+        <label class="taille"><input class="visuellement-cache" type="radio" name="sg-taille" value="XL">XL</label>
+      </fieldset>
+    </section>
+
+    <section aria-labelledby="c-quantite">
+      <h2 id="c-quantite">Quantité <span class="sg-note">83:269</span></h2>
+      <div class="quantite" data-quantite data-min="1" data-max="9" role="group" aria-label="Quantité">
+        <button class="quantite__bouton" type="button" data-moins><span class="icone icone--moins-16" aria-hidden="true"></span><span class="visuellement-cache">Retirer une pièce</span></button>
+        <output class="quantite__valeur" aria-live="polite">1</output>
+        <button class="quantite__bouton" type="button" data-plus><span class="icone icone--plus-16" aria-hidden="true"></span><span class="visuellement-cache">Ajouter une pièce</span></button>
+      </div>
+    </section>
+
+    <!-- ===================== Navigation ===================== -->
+    <section aria-labelledby="c-onglets">
+      <h2 id="c-onglets">Onglets et accordéon <span class="sg-note">83:253 · 83:267</span></h2>
+      <div>
+        <div class="onglets" role="tablist" aria-label="Informations produit">
+          <button class="onglet" role="tab" id="sg-o1" aria-controls="sg-p1" aria-selected="true">Vision produit</button>
+          <button class="onglet" role="tab" id="sg-o2" aria-controls="sg-p2" aria-selected="false">Détails produit</button>
+          <button class="onglet est-survol" role="tab" id="sg-o3" aria-controls="sg-p3" aria-selected="false">Informations de livraison</button>
+        </div>
+        <div class="onglet-panneau texte-m" role="tabpanel" id="sg-p1" aria-labelledby="sg-o1">Panneau Vision produit.</div>
+        <div class="onglet-panneau texte-m" role="tabpanel" id="sg-p2" aria-labelledby="sg-o2" hidden>Panneau Détails produit.</div>
+        <div class="onglet-panneau texte-m" role="tabpanel" id="sg-p3" aria-labelledby="sg-o3" hidden>Panneau Informations de livraison.</div>
+      </div>
+      <div style="max-width: 26rem">
+        <details class="accordeon"><summary class="accordeon__titre">Détails produit</summary><div class="accordeon__contenu">Coupe ample, épaules tombantes. Doublure en coton. Fermeture zippée métal. Entretien : nettoyage à sec.</div></details>
+        <details class="accordeon" open><summary class="accordeon__titre">Détails produit</summary><div class="accordeon__contenu">Coupe ample, épaules tombantes. Doublure en coton. Fermeture zippée métal. Entretien : nettoyage à sec.</div></details>
+      </div>
+      <p class="sg-note">Contenus de démonstration repris du UI kit.</p>
+    </section>
+
+    <section aria-labelledby="c-point">
+      <h2 id="c-point">Point et étape du tunnel <span class="sg-note">83:283 · 83:298</span></h2>
+      <div class="sg-rangee">
+        <button class="point" type="button" aria-expanded="false">1<span class="visuellement-cache"> : voir la pièce</span></button>
+        <button class="point" type="button" aria-expanded="true">1<span class="visuellement-cache"> : voir la pièce</span></button>
+      </div>
+      <ol class="etapes" aria-label="Étapes de la commande">
+        <li class="etape"><span class="etape__pastille"><span class="icone icone--coche" aria-hidden="true"></span></span>Coordonnées<span class="visuellement-cache"> (terminée)</span></li>
+        <li class="etape" aria-current="step"><span class="etape__pastille">2</span>Livraison</li>
+        <li class="etape etape--a-venir"><span class="etape__pastille">3</span>Paiement</li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="c-delai">
+      <h2 id="c-delai">Délai de fabrication <span class="sg-note">85:233</span></h2>
+      <p data-delai></p>
+      <p class="sg-note">Texte lu dans data/catalogue.json (clé « delai »).</p>
+    </section>
+
+    <section aria-labelledby="c-logo">
+      <h2 id="c-logo">Logo et pictogramme N <span class="sg-note">82:131 · 82:134</span></h2>
+      <div class="sg-rangee">
+        <img src="../assets/logo/logo-noir.png" alt="NAME. atelier" width="119" height="50">
+        <img src="../assets/logo/picto-n-noir.png" alt="Pictogramme N" width="50" height="50">
+      </div>
+      <div class="sg-rangee sg-sombre">
+        <img src="../assets/logo/logo-blanc.png" alt="NAME. atelier, version blanche" width="119" height="50">
+        <img src="../assets/logo/picto-n-blanc.png" alt="Pictogramme N, version blanche" width="50" height="50">
+      </div>
+    </section>
+  </main>
+
+  <footer data-layout="pied"></footer>
+
+  <script type="module">
+    import { initialiserOnglets } from './js/onglets.js';
+    import { initialiserQuantites } from './js/quantite.js';
+
+    // Pastilles de couleur : valeur lue dans tokens.css
+    const styles = getComputedStyle(document.documentElement);
+    document.querySelectorAll('[data-pastilles]').forEach((grille) => {
+      grille.innerHTML = grille.dataset.pastilles.trim().split(/\s+/).map((nom) => `
+        <div class="sg-pastille"><i style="background: var(--${nom})"></i>--${nom}<code>${styles.getPropertyValue('--' + nom).trim()}</code></div>`).join('');
+    });
+
+    // Espacements
+    document.querySelectorAll('[data-espaces]').forEach((bloc) => {
+      bloc.innerHTML = bloc.dataset.espaces.trim().split(/\s+/).map((nom) => `
+        <div class="sg-espace"><i style="width: var(--${nom})"></i>--${nom} · ${styles.getPropertyValue('--' + nom).trim()}</div>`).join('');
+    });
+
+    // Boutons : 3 types × 2 tailles × 4 états
+    const etats = [['Défaut', ''], ['Survol', 'est-survol'], ['Pressé', 'est-presse'], ['Désactivé', 'disabled']];
+    const types = [['Principal', ''], ['Secondaire', 'bouton--secondaire'], ['Texte', 'bouton--texte']];
+    document.querySelector('[data-boutons]').innerHTML = types.flatMap(([nomType, classeType]) =>
+      [['M', ''], ['L', 'bouton--l']].map(([nomTaille, classeTaille]) => `
+        <h3>${nomType} · ${nomTaille}</h3>
+        <div class="sg-rangee">${etats.map(([nomEtat, etat]) => `
+          <div class="sg-etat"><small>${nomEtat}</small>
+            <button class="bouton ${classeType} ${classeTaille} ${etat === 'disabled' ? '' : etat}" type="button" ${etat === 'disabled' ? 'disabled' : ''}>Acheter</button>
+          </div>`).join('')}
+          <div class="sg-etat"><small>Avec icône</small>
+            <button class="bouton ${classeType} ${classeTaille}" type="button">Commander<span class="icone ${nomTaille === 'L' ? 'icone--fleche-20' : 'icone--fleche-16'}" aria-hidden="true"></span></button>
+          </div>
+        </div>`)).join('');
+
+    // Largeur courante (vérification des modes)
+    const largeur = document.querySelector('[data-largeur]');
+    const majLargeur = () => { largeur.textContent = `${innerWidth} px — mode ${innerWidth >= 1024 ? 'Desktop' : 'Mobile'}`; };
+    addEventListener('resize', majLargeur);
+    majLargeur();
+
+    initialiserOnglets();
+    initialiserQuantites();
+  </script>
+</body>
+</html>
