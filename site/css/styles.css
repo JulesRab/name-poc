@@ -1,0 +1,49 @@
+/* ==========================================================================
+   NAME. — Styles
+   Uniquement des variables de tokens.css (aucune valeur en dur).
+   Base minimale du prompt 00 : le style des composants arrive au prompt 01.
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Lien d'évitement : visible seulement au focus clavier */
+.lien-evitement {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translateY(-100%);
+}
+
+.lien-evitement:focus {
+  transform: none;
+}
+
+/* Contenu réservé aux lecteurs d'écran */
+.visuellement-cache {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Information manquante dans toutes les sources : doit rester visible */
+.a-definir {
+  outline: 2px dashed currentColor;
+}

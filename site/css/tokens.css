@@ -1,0 +1,32 @@
+/* ==========================================================================
+   NAME. — Jetons du design system
+   --------------------------------------------------------------------------
+   Seul fichier où une couleur, une taille, un espacement ou un rayon peut
+   être écrit en dur. Tout le reste du CSS utilise ces variables.
+
+   Source : variables Figma de la page DA (0:1) et du UI kit (81:205).
+   Rempli au prompt 01, étape 1. Le nom Figma de chaque variable est noté
+   en commentaire à côté de la propriété CSS.
+
+   Organisation prévue :
+   1. Couleurs        --couleur-…   (collection Figma « Couleurs »)
+   2. Typographie     --police-…, --titre-…, --texte-…, --bouton-…
+   3. Espacements     --espace-…
+   4. Rayons, bordures, ombres
+   5. Mise en page    largeurs, gouttières, hauteur de l'en-tête
+   6. Animations      durées et courbes (discrètes)
+
+   Modes : les valeurs du mode « Mobile » s'appliquent par défaut (mobile
+   d'abord, 393 px). Celles du mode « Desktop » sont redéfinies dans la
+   media query ci-dessous, à partir de 1024 px.
+   ========================================================================== */
+
+:root {
+  /* Mode Mobile (par défaut) — à remplir au prompt 01 */
+}
+
+@media (min-width: 1024px) {
+  :root {
+    /* Mode Desktop — à remplir au prompt 01 */
+  }
+}

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page indisponible — NAME.</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/png" href="../assets/logo/picto-n-noir.png">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="module" src="js/layout.js"></script>
+</head>
+<body>
+  <header data-layout="en-tete"></header>
+
+  <main id="contenu" class="indisponible">
+    <!-- Cible de tous les liens sans écran (docs/routes.md). Textes à valider dans docs/microcopy.md. -->
+    <h1>Cette page n’est pas encore disponible.</h1>
+    <p>Elle ne fait pas partie de ce prototype.</p>
+    <p>
+      <a href="index.html" data-retour>Revenir à la page précédente</a>
+    </p>
+  </main>
+
+  <footer data-layout="pied"></footer>
+
+  <script>
+    // Retour à la page précédente si elle vient du site, sinon à l'accueil.
+    const lien = document.querySelector('[data-retour]');
+    const vientDuSite = document.referrer && new URL(document.referrer).origin === location.origin;
+    if (vientDuSite && history.length > 1) {
+      lien.addEventListener('click', (evenement) => {
+        evenement.preventDefault();
+        history.back();
+      });
+    } else {
+      lien.textContent = 'Revenir à l’accueil';
+    }
+  </script>
+</body>
+</html>

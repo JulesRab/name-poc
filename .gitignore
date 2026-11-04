@@ -1,0 +1,17 @@
+# Système
+.DS_Store
+Thumbs.db
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+
+# Photos brutes, gardées en local pour plus tard (non utilisées par le POC)
+ressources/
+
+# Claude Code : réglages locaux
+.claude/settings.local.json
+
+# Captures et journaux de Playwright
+.playwright-mcp/

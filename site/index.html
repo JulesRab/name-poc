@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NAME. — Name Atelier</title>
+  <meta name="description" content="Name. est un label de création textile qui construit ses récits à travers le vêtement. Matières naturelles, issues de deadstocks.">
+  <link rel="icon" type="image/png" href="../assets/logo/picto-n-noir.png">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="module" src="js/layout.js"></script>
+</head>
+<body>
+  <header data-layout="en-tete"></header>
+
+  <main id="contenu">
+    <!-- Coquille provisoire (prompt 00). L'écran 01.1 Accueil est construit au prompt 02. -->
+    <h1 class="visuellement-cache">NAME.</h1>
+    <p class="a-definir">[À définir] Accueil — écran 01.1, construit au prompt 02.</p>
+    <p data-controle-catalogue>Chargement du catalogue…</p>
+  </main>
+
+  <footer data-layout="pied"></footer>
+
+  <script type="module">
+    // Contrôle provisoire du chargement des données, retiré au prompt 02.
+    import { chargerCatalogue, produitsSignature } from './js/catalogue.js';
+
+    const sortie = document.querySelector('[data-controle-catalogue]');
+    try {
+      const catalogue = await chargerCatalogue();
+      const produits = await produitsSignature();
+      const disponibles = produits.filter((p) => p.statut === 'disponible').length;
+      sortie.textContent = `Catalogue chargé : ${produits.length} pièces Signature (${disponibles} disponibles), ${catalogue.collection.looks.length} looks ${catalogue.collection.nom}`;
+      console.info('[NAME.] catalogue chargé', catalogue);
+    } catch (erreur) {
+      sortie.textContent = 'Le catalogue n’a pas pu être chargé. Servir le projet depuis la racine : python3 -m http.server 8000';
+      console.error('[NAME.]', erreur);
+    }
+  </script>
+</body>
+</html>

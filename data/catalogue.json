@@ -1,0 +1,62 @@
+{
+  "_source": "Transcrit de la page Maquettes du Figma (03.1 Liste produits, 04.4 Guide des tailles) le 04/11/2026, et de la grille de prix de Noé pour Outlaws. Données de démonstration pour le POC.",
+  "delai": "Fabriquée à la commande · chez vous sous 1 à 2 semaines",
+  "livraison": "Livraison offerte en France",
+  "retours": "Retours sous 14 jours",
+  "tailles": ["XS", "S", "M", "L", "XL"],
+  "signature": [
+    {
+      "chapitre": "I",
+      "titre": "Chapitre I",
+      "sousTitre": "Février 2027 · dérivé d'Outlaws.",
+      "statut": "disponible",
+      "produits": [
+        { "slug": "bombers", "nom": "Bombers", "prix": 700, "tissu": "sergé de coton bleu marine", "inspiration": "Outlaws. — L'Homme de Main", "type": "vestes", "guideTailles": "bombers" },
+        { "slug": "pull", "nom": "Pull", "prix": 210, "tissu": "maille de laine bleu nuit", "type": "hauts", "guideTailles": null },
+        { "slug": "pantalon-wide", "nom": "Pantalon wide", "prix": 330, "tissu": "laine mérinos gris béton", "type": "pantalons", "guideTailles": null },
+        { "slug": "pantalon-regular", "nom": "Pantalon regular", "prix": 280, "tissu": "laine rayée noire", "type": "pantalons", "guideTailles": null },
+        { "slug": "blouson-cuir", "nom": "Blouson en cuir", "prix": 950, "tissu": "cuir d'agneau noir", "type": "vestes", "guideTailles": null },
+        { "slug": "chemise", "nom": "Chemise", "prix": 190, "tissu": "popeline de coton blanche", "type": "hauts", "guideTailles": null }
+      ]
+    },
+    {
+      "chapitre": "II",
+      "titre": "Chapitre II",
+      "sousTitre": "Août 2027 · nouvelles pièces dérivées d'Outlaws · à venir, prix indicatifs",
+      "statut": "a-venir",
+      "produits": [
+        { "slug": "zip-up", "nom": "Zip-up", "prix": 210, "tissu": "molleton de coton gris chiné", "type": "hauts" },
+        { "slug": "hoodie", "nom": "Hoodie", "prix": 200, "tissu": "molleton de coton noir", "type": "hauts" },
+        { "slug": "crewneck", "nom": "Crewneck", "prix": 180, "tissu": "jersey de laine écru", "type": "hauts" },
+        { "slug": "debardeur", "nom": "Débardeur", "prix": 40, "tissu": "jersey de coton blanc", "type": "hauts" },
+        { "slug": "t-shirt", "nom": "T-shirt", "prix": 55, "tissu": "jersey de coton bleu nuit", "type": "hauts" }
+      ]
+    }
+  ],
+  "guidesTailles": {
+    "bombers": {
+      "unite": "cm, pièce posée à plat",
+      "mesures": {
+        "poitrine": { "XS": 54, "S": 57, "M": 60, "L": 63, "XL": 66 },
+        "longueur": { "XS": 64, "S": 66, "M": 68, "L": 70, "XL": 72 },
+        "epaules":  { "XS": 44, "S": 46, "M": 48, "L": 50, "XL": 52 },
+        "manche":   { "XS": 60, "S": 61, "M": 62, "L": 63, "XL": 64 }
+      },
+      "referencesPossibles": ["Veste ou manteau"],
+      "exempleReference": { "poitrine": 56, "longueur": 70, "epaules": 48, "manche": 62, "tailleAttendue": "M" }
+    }
+  },
+  "collection": {
+    "slug": "outlaws",
+    "nom": "Outlaws.",
+    "intro": "Inspirée du cinéma et de l'imagerie des jeux vidéo autour du crime organisé. Cinq personnages, chacun une facette du pouvoir, de la loyauté et de la violence.",
+    "mention": "Pièces uniques · 1 exemplaire",
+    "looks": [
+      { "slug": "le-parrain", "rang": 1, "personnage": "Le Parrain", "prix": 2400, "statut": "disponible", "pieces": [ { "nom": "Tailleur", "prix": 1480 }, { "nom": "Chemise", "prix": 320 }, { "nom": "Pantalon", "prix": 600 } ] },
+      { "slug": "le-bras-droit", "rang": 2, "personnage": "Le Bras-Droit", "prix": 2300, "statut": "disponible", "pieces": [ { "nom": "Fourrure", "prix": 1260 }, { "nom": "Veston", "prix": 490 }, { "nom": "Pantalon", "prix": 550 } ] },
+      { "slug": "le-conseiller", "rang": 3, "personnage": "Le Conseiller", "prix": 1750, "statut": "disponible", "pieces": [ { "nom": "Manteau", "prix": 1050 }, { "nom": "Chemise", "prix": 280 }, { "nom": "Pantalon", "prix": 420 } ] },
+      { "slug": "le-baron", "rang": 4, "personnage": "Le Baron", "prix": 1700, "statut": "disponible", "pieces": [ { "nom": "Trench", "prix": 970 }, { "nom": "Pull", "prix": 400 }, { "nom": "Pantalon", "prix": 330 } ] },
+      { "slug": "l-homme-de-main", "rang": 5, "personnage": "L'Homme de Main", "prix": 1050, "statut": "disponible", "pieces": [ { "nom": "Bombers", "prix": 720 }, { "nom": "Débardeur", "prix": 30 }, { "nom": "Pantalon", "prix": 300 } ] }
+    ]
+  }
+}
