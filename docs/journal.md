@@ -105,3 +105,9 @@ Une entrée par itération : date, prompt, résultat, corrections.
 - Photos des maquettes (entrées, bandeau Outlaws) : à exporter de Figma dans `assets/images/` si l'équipe le souhaite.
 - Place de la phrase de marque sur mobile (H1).
 - Prochaine étape : prompt 03, flow 1 (fiche produit vers panier) — le fichier de prompt est encore vide.
+
+### 04/11/2026 — Complément prompt 02 : photos de l'accueil
+
+- Décisions : phrase de marque laissée sous les entrées pour l'instant ; performance optimisée plus tard ; **photos des maquettes exportées de Figma dès qu'elles existent** (organisation de `assets/` plus tard).
+- Exportées de Figma (nœuds 90:157, 90:170, 90:227), recompressées (q70) : `assets/images/accueil-{signature,collection,outlaws}.jpg` + versions `-mobile`. 113 à 625 Ko ; bandeau en `loading="lazy"`, entrée Signature en `fetchpriority="high"`.
+- Dégradé adouci (plein sombre aux trois quarts) pour laisser voir les photos ; texte blanc lisible vérifié en 393 et 1440 px.

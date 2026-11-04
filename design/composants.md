@@ -71,8 +71,8 @@ CSS : `site/css/styles.css` (jetons dans `site/css/tokens.css`). Icônes : SVG F
 | --- | --- | --- | --- |
 | Volet filtres | Facette « Offre » (Signature, Collection) | Retirée | Décision du 04/11 : segmentation stricte, pas de looks dans la liste Signature |
 | Filtre Taille | Une taille sélectionnée | Plusieurs tailles possibles (cases) | Règle du prompt : plusieurs valeurs d'une facette = OU |
-| Entrées et bandeau de l'accueil | Photos (Instagram) | Blocs gris + dégradé | Prompt 02 : blocs gris tant que `assets/images/` est vide |
-| Dégradé des entrées et du bandeau | Dégradé radial | Dégradé linéaire, plein sombre à mi-hauteur | Texte blanc ≥ 14:1 sur bloc gris |
+| Entrées et bandeau de l'accueil | Photos | Photos exportées de Figma (`assets/images/accueil-*.jpg`, versions desktop et mobile) | Décision du 04/11 : exporter les images Figma dès qu'elles existent |
+| Dégradé des entrées et du bandeau | Dégradé radial | Dégradé linéaire, plein sombre aux trois quarts | Texte blanc lisible sur toutes les zones de la photo |
 | Entrées en mobile | Pas de maquette | Chaque entrée = moitié de l'écran sous l'en-tête | Recette mission 0 : les deux entrées visibles sans défiler |
 | Carte produit | Vue de dos au survol | Pas de changement au survol ; flèches au survol (souris) ou toujours (toucher) | CLAUDE.md |
 | Carte look | Citation du personnage | Non affichée | Absente du catalogue (pas d'invention) |

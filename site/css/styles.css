@@ -1699,14 +1699,29 @@ select.champ__saisie.est-vide {
   padding-top: var(--espace-6);
 }
 
+/* Photos des entrées et du bandeau (exportées de Figma, assets/images/) */
+.entree__photo,
+.bandeau__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+
+.bandeau__photo {
+  object-position: 50% 30%;
+}
+
 /* Dégradé sombre en bas (Rectangle 139:6960) : lisibilité du texte blanc */
 .entree::after,
 .bandeau::after {
   content: "";
   position: absolute;
   inset: 40% 0 0;
-  /* Plein sombre dès la moitié du dégradé : texte blanc ≥ 4,5:1 */
-  background: linear-gradient(to bottom, transparent, var(--couleur-fond-inverse) 50%);
+  /* Plein sombre aux trois quarts du dégradé (photos) : texte blanc lisible */
+  background: linear-gradient(to bottom, transparent, var(--couleur-fond-inverse) 75%);
   pointer-events: none;
 }
 
