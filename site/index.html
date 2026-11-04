@@ -12,34 +12,81 @@
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/styles.css">
   <script type="module" src="js/layout.js"></script>
+  <script type="module" src="js/accueil.js"></script>
 </head>
 <body>
   <header data-layout="en-tete"></header>
 
   <main id="contenu">
-    <!-- Coquille provisoire (prompt 00). L'écran 01.1 Accueil est construit au prompt 02. -->
-    <h1 class="visuellement-cache">NAME.</h1>
-    <p class="a-definir">[À définir] Accueil — écran 01.1, construit au prompt 02.</p>
-    <p data-controle-catalogue>Chargement du catalogue…</p>
+    <h1 class="visuellement-cache">NAME. — label de création textile, Signature. et Collection.</h1>
+
+    <!-- 01.1 · Entrées Signature / Collection (90:155) -->
+    <div class="entrees">
+      <a class="entree" href="signature.html">
+        <span class="visuel entree__visuel" role="img" aria-label="Visuel à produire : photo Signature, porté du Bombers">Photo Signature — porté du Bombers</span>
+        <span class="entree__libelle">
+          <span class="entree__titre">Signature.</span>
+          <span class="entree__sous-titre">Les compagnons de route. Fabriqués à la commande.</span>
+          <span class="entree__action">Découvrir Signature<span class="icone icone--fleche-20" aria-hidden="true"></span></span>
+        </span>
+      </a>
+      <a class="entree" href="indisponible.html">
+        <span class="visuel entree__visuel" role="img" aria-label="Visuel à produire : photo Collection Outlaws, personnage">Photo Collection Outlaws. — personnage</span>
+        <span class="entree__libelle">
+          <span class="entree__titre">Collection.</span>
+          <span class="entree__sous-titre">Outlaws. Cinq personnages, cinq looks en pièces uniques.</span>
+          <span class="entree__action">Découvrir Outlaws.<span class="icone icone--fleche-20" aria-hidden="true"></span></span>
+        </span>
+      </a>
+    </div>
+
+    <!-- Phrase de marque (90:153) -->
+    <p class="phrase-marque">Name. est un label de création textile qui construit ses récits à travers le vêtement. Matières naturelles, issues de deadstocks.</p>
+
+    <!-- Signature — Chapitre I (90:180) -->
+    <section class="accueil-section" aria-labelledby="titre-chapitre-i">
+      <div class="titre-section">
+        <div class="titre-section__titres">
+          <h2 class="titre-m" id="titre-chapitre-i">Signature. — Chapitre I</h2>
+          <p class="texte-m texte-secondaire">Disponible dès février 2027 · fabriqué à la commande</p>
+        </div>
+        <a class="lien" href="signature.html">Voir toute la ligne</a>
+      </div>
+      <ul class="grille grille--4" role="list" data-chapitre-i></ul>
+    </section>
+
+    <!-- Collection — Outlaws (90:225) -->
+    <section class="bandeau" aria-labelledby="titre-outlaws">
+      <span class="visuel bandeau__visuel" role="img" aria-label="Visuel à produire : photo de groupe des cinq personnages Outlaws.">Photo Outlaws. — les cinq personnages</span>
+      <div class="bandeau__texte sur-fond-sombre">
+        <h2 class="bandeau__titre" id="titre-outlaws">Outlaws.</h2>
+        <p class="bandeau__intro" data-intro-outlaws></p>
+        <a class="bouton bouton--l bouton--sur-sombre" href="indisponible.html">Découvrir les 5 personnages</a>
+      </div>
+    </section>
+
+    <!-- Engagements (90:239) -->
+    <section class="engagements" aria-label="Nos engagements">
+      <div class="engagement">
+        <h2 class="titre-s">Deadstock</h2>
+        <p class="texte-m">Des matières naturelles trouvées dans les stocks dormants. Quand le tissu change, la coupe reste.</p>
+      </div>
+      <div class="engagement">
+        <h2 class="titre-s">À la commande</h2>
+        <p class="texte-m">Rien n’est produit d’avance. Votre pièce est fabriquée pour vous, reçue sous 1 à 2 semaines.</p>
+      </div>
+      <div class="engagement">
+        <h2 class="titre-s">Unisexe</h2>
+        <p class="texte-m">Une seule ligne, des tailles XS à XL, des mesures à plat pour choisir sans essayer.</p>
+      </div>
+    </section>
+
+    <!-- Être prévenu (90:249) -->
+    <div class="zone-prevenu">
+      <section data-etre-prevenu></section>
+    </div>
   </main>
 
   <footer data-layout="pied"></footer>
-
-  <script type="module">
-    // Contrôle provisoire du chargement des données, retiré au prompt 02.
-    import { chargerCatalogue, produitsSignature } from './js/catalogue.js';
-
-    const sortie = document.querySelector('[data-controle-catalogue]');
-    try {
-      const catalogue = await chargerCatalogue();
-      const produits = await produitsSignature();
-      const disponibles = produits.filter((p) => p.statut === 'disponible').length;
-      sortie.textContent = `Catalogue chargé : ${produits.length} pièces Signature (${disponibles} disponibles), ${catalogue.collection.looks.length} looks ${catalogue.collection.nom}`;
-      console.info('[NAME.] catalogue chargé', catalogue);
-    } catch (erreur) {
-      sortie.textContent = 'Le catalogue n’a pas pu être chargé. Servir le projet depuis la racine : python3 -m http.server 8000';
-      console.error('[NAME.]', erreur);
-    }
-  </script>
 </body>
 </html>

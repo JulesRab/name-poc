@@ -165,6 +165,20 @@
   --pied-marge: 24px;                                       /* Pied Mobile, padding horizontal */
   --pied-marge-verticale: 48px;                             /* Pied Mobile, padding vertical */
 
+  /* Flow 4 — accueil, liste, recherche (relevés sur 01.1, 03.x, 02.x) */
+  --ratio-carte: 4 / 5;                                     /* Carte produit, média 384 × 480 */
+  --ratio-look: 592 / 848;                                  /* Carte look, média */
+  --ratio-entree: 720 / 744;                                /* Entrées Signature / Collection (desktop) */
+  --ratio-bandeau: 393 / 560;                               /* [POC] Bandeau Outlaws mobile (pas de maquette) */
+  --hauteur-bandeau: 720px;                                 /* Bandeau Outlaws desktop */
+  --largeur-phrase: 760px;                                  /* Phrase de marque */
+  --largeur-intro: 640px;                                   /* Intro Signature */
+  --largeur-bandeau-texte: 520px;                           /* Texte du bandeau Outlaws */
+  --largeur-prevenu: 560px;                                 /* Être prévenu */
+  --largeur-volet: 400px;                                   /* Volet filtres */
+  --largeur-carte-recherche: 288px;                         /* Cartes des résultats de recherche */
+  --opacite-fleche: 0.9;                                    /* Fond des flèches de carte */
+
   /* Superposition */
   --plan-entete: 10;
   --plan-volet: 20;

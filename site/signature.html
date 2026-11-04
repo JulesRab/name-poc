@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Signature. — NAME.</title>
+  <meta name="description" content="Signature. : des coupes qui reviennent, dans le tissu deadstock du moment. Fabriquées à la commande, reçues en une à deux semaines.">
+  <link rel="icon" type="image/png" href="../assets/logo/picto-n-noir.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Playfair+Display+SC&display=swap">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="module" src="js/layout.js"></script>
+  <script type="module" src="js/signature.js"></script>
+</head>
+<body>
+  <header data-layout="en-tete"></header>
+
+  <main id="contenu">
+    <!-- 03.1 Introduction (98:3497) · 03.3 version compacte (94:2192) -->
+    <div class="liste-intro" data-intro>
+      <h1 class="liste-intro__titre">Signature.</h1>
+      <p class="liste-intro__texte">Les compagnons de route : des coupes qui reviennent, dans le tissu deadstock du moment. Fabriquées à la commande, reçues en une à deux semaines.</p>
+    </div>
+
+    <!-- Barre de filtres (98:3500 · 94:2194) -->
+    <div class="barre-filtres" data-barre></div>
+
+    <!-- Chapitres (03.1) -->
+    <div data-chapitres></div>
+
+    <!-- Résultats filtrés (03.3) -->
+    <div class="liste-resultats" data-resultats hidden></div>
+
+    <div class="zone-prevenu">
+      <section data-etre-prevenu></section>
+    </div>
+  </main>
+
+  <!-- Volet filtres (89:402) -->
+  <dialog class="volet" id="volet-filtres" aria-labelledby="volet-filtres-titre">
+    <form class="volet__panneau" novalidate>
+      <div class="volet__entete">
+        <h2 class="titre-s" id="volet-filtres-titre">Filtrer</h2>
+        <button class="en-tete__icone" type="button" data-fermer-volet>
+          <span class="icone icone--fermer" aria-hidden="true"></span>
+          <span class="visuellement-cache">Fermer les filtres</span>
+        </button>
+      </div>
+      <div class="volet__contenu" data-facettes></div>
+      <div class="volet__actions">
+        <button class="bouton bouton--l bouton--texte" type="button" data-effacer>Effacer</button>
+        <button class="bouton bouton--l volet__valider" type="submit" data-voir aria-live="polite">Voir 11 résultats</button>
+      </div>
+    </form>
+  </dialog>
+
+  <footer data-layout="pied"></footer>
+</body>
+</html>

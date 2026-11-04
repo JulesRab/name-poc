@@ -51,6 +51,33 @@ CSS : `site/css/styles.css` (jetons dans `site/css/tokens.css`). Icônes : SVG F
 | Focus | Absent | Contour 2 px, décalé de 2 px | Focus visible (validé le 04/11) |
 | Titres du menu mobile | 36 px (mode Desktop affiché dans la maquette) | `--titre-l` = 28 px en mobile | Mode Mobile des variables |
 
+## Flow 4 — accueil, liste Signature, recherche (prompt 02)
+
+| Composant Figma | Nœud | Code | États couverts |
+| --- | --- | --- | --- |
+| Carte produit (Disponible, À venir) | 85:296 | `js/carte-produit.js` → `carteProduit()` ; `.carte-produit` (`__media`, `__visuel`, `__fleche`, `__compte`, `__infos`, `__lien`) | Disponible, À venir (mention « À venir · août 2027 »), flèches + compteur « 1 / 2 ». Carte entière cliquable |
+| Carte look (Disponible, Vendu) | 85:316 | `carteLook()` ; `.carte-look` | Disponible, Vendu. Utilisée dans la recherche uniquement (la liste Signature ne montre pas de looks) |
+| Être prévenu (Défaut, Envoyé, Erreur, Mobile) | 86:346 | `[data-etre-prevenu]` + `js/etre-prevenu.js` ; `.etre-prevenu` | Défaut, Erreur (`aria-invalid` + message), Envoyé (focus sur la confirmation). Mobile : bouton pleine largeur sous le champ |
+| Volet filtres | 89:402 | `dialog.volet` + `js/volet.js` (générique) + `js/filtres.js` | Ouvert, compteur « Voir n résultat(s) », Effacer, Échap / voile / croix (annule les changements non validés) |
+| Barre de filtres | 98:3500 · 94:2194 | `.barre-filtres` (dans `js/signature.js`) | Sans filtre (compteur), avec filtres (« Filtrer (n) », puces supprimables, « Tout effacer ») |
+| Recherche (Suggestions, Résultats, Aucun résultat) | 89:617 | `dialog#recherche.recherche` + `js/recherche.js` | Suggestions, Résultats (produits + looks, prix), Aucun résultat (retours Signature / Collection) |
+| Entrées Signature / Collection | 90:155 | `.entrees > a.entree` | Bloc gris + dégradé sombre + libellé blanc |
+| Bandeau Outlaws | 90:226 | `.bandeau` ; bouton `.bouton--sur-sombre` | — |
+| Engagements | 90:239 | `.engagements > .engagement` | — |
+
+### Écarts du flow 4
+
+| Élément | Figma | Code | Raison |
+| --- | --- | --- | --- |
+| Volet filtres | Facette « Offre » (Signature, Collection) | Retirée | Décision du 04/11 : segmentation stricte, pas de looks dans la liste Signature |
+| Filtre Taille | Une taille sélectionnée | Plusieurs tailles possibles (cases) | Règle du prompt : plusieurs valeurs d'une facette = OU |
+| Entrées et bandeau de l'accueil | Photos (Instagram) | Blocs gris + dégradé | Prompt 02 : blocs gris tant que `assets/images/` est vide |
+| Dégradé des entrées et du bandeau | Dégradé radial | Dégradé linéaire, plein sombre à mi-hauteur | Texte blanc ≥ 14:1 sur bloc gris |
+| Entrées en mobile | Pas de maquette | Chaque entrée = moitié de l'écran sous l'en-tête | Recette mission 0 : les deux entrées visibles sans défiler |
+| Carte produit | Vue de dos au survol | Pas de changement au survol ; flèches au survol (souris) ou toujours (toucher) | CLAUDE.md |
+| Carte look | Citation du personnage | Non affichée | Absente du catalogue (pas d'invention) |
+| Savoir-faire | 200:3782, 213:7767 | Non utilisé sur l'accueil | Bloc de la fiche produit (description Figma) : prompt 03 |
+
 ## À construire avec leur flow
 
-Carte produit, Carte look, Ligne panier, Récapitulatif, Tissu du moment, Étapes de fabrication, Être prévenu, Infos produit, Infos look, En-tête commande, Fiche pièce, Mosaïque, Point mosaïque, Panneau panier, Guide des tailles, Volet filtres, Volet fabrication, Recherche, Toast, Bandeau d'arrivée, Étape de suivi, Frise de fabrication, Détail d'étape, Savoir-faire, Sliders et carrousels.
+Ligne panier, Récapitulatif, Tissu du moment, Étapes de fabrication, Infos produit, Infos look, En-tête commande, Fiche pièce, Mosaïque, Point mosaïque, Panneau panier, Guide des tailles, Volet fabrication, Toast, Bandeau d'arrivée, Étape de suivi, Frise de fabrication, Détail d'étape, Savoir-faire, Sliders et carrousels.

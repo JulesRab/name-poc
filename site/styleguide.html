@@ -203,6 +203,18 @@
       </ol>
     </section>
 
+    <section aria-labelledby="c-cartes">
+      <h2 id="c-cartes">Carte produit et carte look <span class="sg-note">85:296 · 85:316</span></h2>
+      <ul class="grille grille--4" role="list" data-sg-cartes></ul>
+      <p class="sg-note">Flèches visibles au survol (souris) ou en permanence (toucher). Aucun changement d'image au survol.</p>
+    </section>
+
+    <section aria-labelledby="c-prevenu">
+      <h2 id="c-prevenu">Être prévenu <span class="sg-note">86:346</span></h2>
+      <p class="sg-note">Saisir « test@ » puis valider : état Erreur. Une adresse valide : état Envoyé. Rien n'est envoyé ni enregistré.</p>
+      <section data-etre-prevenu></section>
+    </section>
+
     <section aria-labelledby="c-delai">
       <h2 id="c-delai">Délai de fabrication <span class="sg-note">85:233</span></h2>
       <p data-delai></p>
@@ -227,6 +239,20 @@
   <script type="module">
     import { initialiserOnglets } from './js/onglets.js';
     import { initialiserQuantites } from './js/quantite.js';
+    import { chargerCatalogue, produitsSignature } from './js/catalogue.js';
+    import { carteProduit, carteLook, initialiserCartes } from './js/carte-produit.js';
+    import { initialiserEtrePrevenu } from './js/etre-prevenu.js';
+
+    const cat = await chargerCatalogue();
+    const ps = await produitsSignature();
+    document.querySelector('[data-sg-cartes]').innerHTML = [
+      carteProduit(ps.find((p) => p.slug === 'bombers')),
+      carteProduit(ps.find((p) => p.statut === 'a-venir')),
+      carteLook(cat.collection.looks[2]),
+      carteLook({ ...cat.collection.looks[2], statut: 'vendu' }),
+    ].map((c) => `<li>${c}</li>`).join('');
+    initialiserCartes();
+    initialiserEtrePrevenu();
 
     // Pastilles de couleur : valeur lue dans tokens.css
     const styles = getComputedStyle(document.documentElement);

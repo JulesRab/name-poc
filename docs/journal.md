@@ -61,3 +61,47 @@ Une entrée par itération : date, prompt, résultat, corrections.
 - Le calque « Packshot dos » de Visuel (survol de la Carte produit) contredit CLAUDE.md : non repris, à confirmer avec l'équipe.
 - Libellés de `indisponible.html` toujours provisoires (`docs/microcopy.md` vide).
 - Prochaine étape : prompt 02, flow 4 (accueil, liste Signature, filtres, recherche).
+
+## 04/11/2026 — Prompt 02 : flow 4 (accueil, liste Signature, filtres, recherche)
+
+**Demande** : accueil 01.1, liste Signature 03.1 à 03.3 avec filtres, calque de recherche 02.1 à 02.3, Être prévenu.
+
+**Décisions validées avant de coder**
+- Pas de facette « Offre » : la liste Signature ne montre jamais de looks (segmentation Signature / Collection renforcée). La page Collection aura ses propres cartes et sa mise en page.
+- Cartes produit : deux visuels gris (face, dos) que les flèches font défiler ; flèches masquées s'il n'y a qu'un visuel.
+- Savoir-faire : réservé à la fiche produit (prompt 03).
+
+**Fait**
+- Frames et nœuds lus : 90:128 (structure), 90:153, 90:155, 90:181, 90:226, 90:239, 98:3495 (structure), 98:3497, 98:3500, 94:1970 et 94:2174 (structure), 94:2192, 94:2194, 94:2216, 183:7325 (structure), 85:296, 85:316, 86:346, 89:402, 89:617, 200:3782.
+- `index.html` (01.1), `signature.html` (03.1–03.3).
+- JS : `liens.js` (table unique des liens), `carte-produit.js`, `etre-prevenu.js`, `volet.js` (volet générique en `<dialog>`), `filtres.js`, `signature.js`, `accueil.js`, `recherche.js` (calque sur toutes les pages via `layout.js`).
+- CSS et jetons du flow 4 ; icônes chevron gauche/droite exportées de Figma.
+- Styleguide et `design/composants.md` complétés.
+
+**Vérifications (Playwright, 393 et 1440 px)**
+| Cas du prompt | Résultat |
+| --- | --- |
+| Pantalons + M + Moins de 300 € | 1 résultat : Pantalon regular, 280 € ; URL `?type=pantalons&taille=M&prix=moins-300` ; 3 puces, « Filtrer (3) » |
+| Disponibilité : À venir | 5 résultats, tous du Chapitre II |
+| Recherche « laine » | Pull, Pantalon wide, Pantalon regular, Crewneck |
+| Recherche « parrain » | Le Parrain |
+| Recherche « denim » | Écran aucun résultat |
+| « test@ » dans Être prévenu | État Erreur ; adresse valide : état Envoyé, rien en storage |
+
+- Recherche sans accents (« debardeur » → Débardeur). Échap ferme la recherche et le volet, focus rendu au déclencheur ; un filtre coché puis abandonné n'est pas appliqué.
+- Console : aucune erreur. Audit zones tactiles (accueil, Signature, 393 px) : aucune sous 44 px.
+
+**Recette**
+- Mission 0 : [x] les entrées Signature et Collection sont visibles sans défiler sur mobile. [ ] Phrase de marque : sur mobile elle tombe sous les deux entrées, donc hors du premier écran : risque pour le test des 5 secondes (H1), à trancher. [ ] Chargement < 3 s sur le téléphone de test : à mesurer sur l'appareil (aucune image, une seule police par famille).
+- Accessibilité : [x] contraste (textes blancs sur dégradé ≥ 14:1), [x] zones 44 px, [x] libellés visibles, [x] clavier et focus (volet, recherche, cartes), [x] textes alternatifs des blocs gris. [ ] Plugin du cours.
+- Premium : [x] aucun badge coloré, aucune promo, aucune note.
+
+**Liens temporaires vers `indisponible.html`** (centralisés dans `js/liens.js`, à basculer avec `pret: true`)
+- Fiches produit (cartes, suggestions de recherche) → prompt 03.
+- Collection (en-tête, menu, entrée Collection, bandeau Outlaws, « Voir la Collection », suggestion « Outlaws. — les looks ») et pages look (cartes look de la recherche) → sans prompt.
+- Panier (en-tête, menu) → prompt 05.
+
+**Reste à faire / à valider**
+- Photos des maquettes (entrées, bandeau Outlaws) : à exporter de Figma dans `assets/images/` si l'équipe le souhaite.
+- Place de la phrase de marque sur mobile (H1).
+- Prochaine étape : prompt 03, flow 1 (fiche produit vers panier) — le fichier de prompt est encore vide.

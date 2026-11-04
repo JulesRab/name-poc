@@ -6,19 +6,17 @@
 import { nombreArticles } from './session.js';
 import { initialiserMenuMobile } from './menu-mobile.js';
 import { initialiserDelais } from './delai.js';
+import { gabaritRecherche, initialiserRecherche } from './recherche.js';
+import { lien, INSTAGRAM, INDISPONIBLE } from './liens.js';
 
-// Écrans pas encore construits : tout mène à indisponible.html (aucun lien cassé).
-// À rebrancher au fil des flows (liste tenue dans docs/journal.md).
-const INDISPONIBLE = 'indisponible.html';
-
+// Liens centralisés dans liens.js (indisponible.html tant qu'un écran n'existe pas).
 const LIENS = {
-  accueil: 'index.html',
-  signature: INDISPONIBLE,   // signature.html — prompt 02
-  collection: INDISPONIBLE,  // collection.html — pas de prompt pour l'instant
-  marque: INDISPONIBLE,      // pas d'écran prévu
-  recherche: INDISPONIBLE,   // calque de recherche — prompt 02
-  panier: INDISPONIBLE,      // panier.html — prompt 05
-  instagram: 'https://www.instagram.com/name.ateliers/',
+  accueil: lien('accueil'),
+  signature: lien('signature'),
+  collection: lien('collection'),
+  marque: lien('marque'),
+  panier: lien('panier'),
+  instagram: INSTAGRAM,
 };
 
 const LOGO_NOIR = '../assets/logo/logo-noir.png';
@@ -49,10 +47,10 @@ function enTete(n) {
         <span class="icone icone--menu" aria-hidden="true"></span>
         <span class="visuellement-cache">Menu</span>
       </button>
-      <a class="en-tete__icone" href="${LIENS.recherche}">
+      <button class="en-tete__icone" type="button" data-ouvrir-recherche aria-haspopup="dialog" aria-controls="recherche">
         <span class="icone icone--recherche" aria-hidden="true"></span>
         <span class="visuellement-cache">Rechercher</span>
-      </a>
+      </button>
     </div>
 
     ${logo()}
@@ -66,10 +64,10 @@ function enTete(n) {
     </nav>
 
     <div class="en-tete__actions">
-      <a class="en-tete__icone en-tete__recherche-desktop" href="${LIENS.recherche}">
+      <button class="en-tete__icone en-tete__recherche-desktop" type="button" data-ouvrir-recherche aria-haspopup="dialog" aria-controls="recherche">
         <span class="icone icone--recherche" aria-hidden="true"></span>
         <span class="visuellement-cache">Rechercher</span>
-      </a>
+      </button>
       <a class="bouton en-tete__panier-desktop" href="${LIENS.panier}">Mon panier (<span data-compteur-panier>${n}</span>)</a>
       <a class="en-tete__panier-mobile" href="${LIENS.panier}" aria-label="${libellePanier(n)}" data-libelle-panier>
         <span class="en-tete__icone" aria-hidden="true"><span class="icone icone--sac"></span></span>
@@ -114,7 +112,7 @@ function menuMobile(n) {
         <hr class="separateur">
 
         <ul class="menu-mobile__secondaire">
-          <li><a href="${LIENS.recherche}">Rechercher</a></li>
+          <li><button type="button" data-ouvrir-recherche aria-haspopup="dialog" aria-controls="recherche">Rechercher</button></li>
           <li><a href="${LIENS.panier}">Mon panier (<span data-compteur-panier>${n}</span>)</a></li>
           <li><a href="${INDISPONIBLE}">Livraison et retours</a></li>
           <li><a href="${INDISPONIBLE}">Contact</a></li>
@@ -177,8 +175,9 @@ function monter() {
   if (zoneEnTete) {
     zoneEnTete.classList.add('en-tete');
     zoneEnTete.innerHTML = enTete(n);
-    zoneEnTete.insertAdjacentHTML('afterend', menuMobile(n));
+    zoneEnTete.insertAdjacentHTML('afterend', menuMobile(n) + gabaritRecherche());
     initialiserMenuMobile();
+    initialiserRecherche();
   }
 
   if (zonePied) {
